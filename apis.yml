@@ -12,8 +12,8 @@ modified: '2026-03-16'
 position: Consumer
 tags:
   - Environment
-  - Risk
   - Modeling
+  - Risk
 url: >-
   https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml
 specificationVersion: '0.19'
@@ -22,8 +22,8 @@ apis:
     name: First Street
     tags:
       - Environment
-      - Risk
       - Modeling
+      - Risk
     humanURL: https://firststreet.org/
     properties:
       - url: https://firststreet.org/
