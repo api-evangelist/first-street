@@ -1,42 +1,43 @@
-# First Street (first-street)
-First Street models use validated and proven methodologies to ensure model accuracy. We measure and predict the impact of a peril based on the underlying physics of how an actual event would transpire. Whether that is a fluid dynamics equation we run or individual pyrome calibrations, our team and partners build off of decades of peer-reviewed research while incorporating the latest technology advancements.This is the only way to create models that can be accurately applied at a property level and can be confidently adjusted into the future under new, unobserved climate scenarios.
+# First Street
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml)
+This is a repository for tracking the APIs, SDKs, and other developer resources for First Street.
 
-## Scope
-
-- **Type:** Contract 
-- **Position:** Consuming 
-- **Access:** 3rd-Party 
-
-## Tags:
-
- - Environment, Risk, Modeling
-
-## Timestamps
-
-- **Created:** 2025-03-01 
-- **Modified:** 2025-04-07 
+First Street models use validated and proven methodologies to ensure model accuracy. They measure and predict the impact of a peril based on the underlying physics of how an actual event would transpire, building on decades of peer-reviewed research and applying models at the property level.
 
 ## APIs
 
-### First Street
-First Street models use validated and proven methodologies to ensure model accuracy. We measure and predict the impact of a peril based on the underlying physics of how an actual event would transpire. Whether that is a fluid dynamics equation we run or individual pyrome calibrations, our team and partners build off of decades of peer-reviewed research while incorporating the latest technology advancements.This is the only way to create models that can be accurately applied at a property level and can be confidently adjusted into the future under new, unobserved climate scenarios.
+### First Street Climate Risk API
 
-**Human URL:** [https://firststreet.org/](https://firststreet.org/)
+Provides physical climate risk data globally, delivering property-level insights into hazards including flood, wildfire, heat, wind, and air quality.
 
+- **Documentation:** [https://docs.firststreet.org/api](https://docs.firststreet.org/api)
 
-#### Tags:
+### First Street Enterprise API
 
- - Environment, Risk, Modeling
+Offers aggregated climate risk views for portfolios, enabling enterprise users to assess risk across multiple properties and geographic regions.
 
-#### Properties
+- **Documentation:** [https://docs.firststreet.org/api](https://docs.firststreet.org/api)
 
-- [Documentation](https://firststreet.org/)
+### First Street Raster Map API
+
+Delivers visual raster layers of climate perils for mapping and visualization use cases.
+
+- **Documentation:** [https://docs.firststreet.org/api](https://docs.firststreet.org/api)
+
+## Tags
+
+- Environment
+- Modeling
+- Risk
+- Climate
+
+## Properties
+
+- [Website](https://firststreet.org/)
+- [Documentation](https://docs.firststreet.org/api)
 
 ## Maintainers
 
 **FN:** Kin Lane
 
-**Email:** info@apievangelist.com
-
+**Email:** kin@apievangelist.com
