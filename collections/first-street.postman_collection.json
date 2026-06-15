@@ -1,0 +1,388 @@
+{
+  "item": [
+    {
+      "id": "6ba7793f-f150-4e33-bee8-d309a459f856",
+      "name": "Climate Risk GraphQL endpoint",
+      "request": {
+        "name": "Climate Risk GraphQL endpoint",
+        "description": {
+          "content": "Run queries and mutations against the Climate Risk GraphQL schema for point and parcel-level climate risk (flood, fire, heat, wind, air).",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "v3",
+            "graphql"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "auth": null,
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "id": "b1c1c4d9-a05f-4c88-a191-2165956d921b",
+          "name": "GraphQL response",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "v3",
+                "graphql"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "<API Key>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {}\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "2b918dc9-9370-48f7-a58f-69f2e241abd3",
+      "name": "Enterprise GraphQL endpoint",
+      "request": {
+        "name": "Enterprise GraphQL endpoint",
+        "description": {
+          "content": "Portfolio-level aggregated climate risk queries.",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "enterprise",
+            "graphql"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "auth": null,
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "id": "80c636a7-117e-4b98-9710-add06f90a78c",
+          "name": "GraphQL response",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "enterprise",
+                "graphql"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "<API Key>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "67431564-bae5-46eb-ba08-554344d052e1",
+      "name": "Fetch a raster map tile for a climate peril",
+      "request": {
+        "name": "Fetch a raster map tile for a climate peril",
+        "description": {},
+        "url": {
+          "path": [
+            "v2",
+            "maps",
+            "tile",
+            ":peril",
+            ":product",
+            ":z",
+            ":x",
+            "{{y}}.png"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "peril",
+              "description": "(Required) "
+            },
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "product",
+              "description": "(Required) "
+            },
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<integer>",
+              "key": "z",
+              "description": "(Required) "
+            },
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<integer>",
+              "key": "x",
+              "description": "(Required) "
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "image/png"
+          }
+        ],
+        "method": "GET",
+        "auth": null
+      },
+      "response": [
+        {
+          "id": "45c75432-78a2-4481-8962-fc03a75fa9f3",
+          "name": "PNG tile",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "v2",
+                "maps",
+                "tile",
+                ":peril",
+                ":product",
+                ":z",
+                ":x",
+                "{{y}}.png"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "<API Key>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "peril",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "product",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "z",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "x",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "image/png"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "image/png"
+            }
+          ],
+          "body": "string",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.firststreet.org",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) ",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<integer>",
+      "key": "y"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "97b0c5dc-b15e-4307-bc5a-2195d0adfc07",
+    "name": "First Street API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "First Street provides property-level physical climate risk data via several APIs: a GraphQL Climate Risk API, a GraphQL Enterprise API, and a tile-based Raster Map API. Authentication is by API key, either as the `key` query parameter or an `Authorization: Bearer <key>` header.\n\nContact Support:\n Name: First Street",
+      "type": "text/plain"
+    }
+  }
+}
