@@ -81,7 +81,7 @@ common:
     url: https://firststreet.org/
   - type: Documentation
     url: https://docs.firststreet.org/api
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://firststreet.org/llms.txt
 maintainers:
   - FN: Kin Lane
