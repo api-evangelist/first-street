@@ -73,6 +73,8 @@ apis:
       The Raster Map API delivers visual raster layers of climate perils for
       mapping and visualization use cases.
 common:
+  - type: AgenticAccess
+    url: agentic-access/first-street-agentic-access.yml
   - type: TrustCenter
     url: security/first-street-trust-center.yml
   - type: VulnerabilityDisclosure
