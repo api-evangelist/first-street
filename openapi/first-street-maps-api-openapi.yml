@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  title: First Street Enterprise Maps API
+  description: 'First Street provides property-level physical climate risk data via several APIs: a GraphQL Climate Risk API, a GraphQL Enterprise API, and a tile-based Raster Map API. Authentication is by API key, either as the `key` query parameter or an `Authorization: Bearer <key>` header.'
+  version: '3.0'
+  contact:
+    name: First Street
+    url: https://docs.firststreet.org/api
+servers:
+- url: https://api.firststreet.org
+  description: First Street production
+security:
+- apiKeyQuery: []
+- bearerAuth: []
+tags:
+- name: Maps
+paths:
+  /v2/maps/tile/{peril}/{product}/{z}/{x}/{y}.png:
+    get:
+      summary: Fetch a raster map tile for a climate peril
+      operationId: getRasterTile
+      parameters:
+      - name: peril
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - flood
+          - fire
+          - heat
+          - wind
+          - air
+      - name: product
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: z
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: x
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: y
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: PNG tile
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+      tags:
+      - Maps
+components:
+  securitySchemes:
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: key
+    bearerAuth:
+      type: http
+      scheme: bearer

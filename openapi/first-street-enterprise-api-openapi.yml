@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: First Street Enterprise API
+  description: 'First Street provides property-level physical climate risk data via several APIs: a GraphQL Climate Risk API, a GraphQL Enterprise API, and a tile-based Raster Map API. Authentication is by API key, either as the `key` query parameter or an `Authorization: Bearer <key>` header.'
+  version: '3.0'
+  contact:
+    name: First Street
+    url: https://docs.firststreet.org/api
+servers:
+- url: https://api.firststreet.org
+  description: First Street production
+security:
+- apiKeyQuery: []
+- bearerAuth: []
+tags:
+- name: Enterprise
+paths:
+  /enterprise/graphql:
+    post:
+      summary: Enterprise GraphQL endpoint
+      description: Portfolio-level aggregated climate risk queries.
+      operationId: enterpriseGraphql
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+                operationName:
+                  type: string
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+      tags:
+      - Enterprise
+components:
+  securitySchemes:
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: key
+    bearerAuth:
+      type: http
+      scheme: bearer
