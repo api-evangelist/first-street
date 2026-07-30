@@ -7,7 +7,20 @@ description: >-
   exposes Climate Risk, Enterprise, and Raster Map APIs for property-level
   climate risk data.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/first-street.png
 access: 3rd-Party
 created: '2025-03-01'
 modified: '2026-04-28'
@@ -21,57 +34,82 @@ url: >-
   https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-  - aid: first-street:climate-risk
-    name: First Street Climate Risk API
-    tags:
-      - Environment
-      - Modeling
-      - Risk
-      - Climate
-    humanURL: https://docs.firststreet.org/api
-    properties:
-      - url: https://firststreet.org/
-        type: Website
-      - url: https://docs.firststreet.org/api
-        type: Documentation
-    description: >-
-      The Climate Risk API provides physical climate risk data globally,
-      delivering property-level insights into hazards including flood,
-      wildfire, heat, wind, and air quality.
-  - aid: first-street:enterprise
-    name: First Street Enterprise API
-    tags:
-      - Environment
-      - Modeling
-      - Risk
-      - Climate
-    humanURL: https://docs.firststreet.org/api
-    properties:
-      - url: https://firststreet.org/
-        type: Website
-      - url: https://docs.firststreet.org/api
-        type: Documentation
-    description: >-
-      The Enterprise API offers aggregated climate risk views for portfolios,
-      enabling enterprise users to assess risk across multiple properties and
-      geographic regions.
-  - aid: first-street:raster-map
-    name: First Street Raster Map API
-    tags:
-      - Environment
-      - Modeling
-      - Risk
-      - Climate
-      - Mapping
-    humanURL: https://docs.firststreet.org/api
-    properties:
-      - url: https://firststreet.org/
-        type: Website
-      - url: https://docs.firststreet.org/api
-        type: Documentation
-    description: >-
-      The Raster Map API delivers visual raster layers of climate perils for
-      mapping and visualization use cases.
+- aid: first-street:climate-risk
+  name: First Street Climate Risk API
+  tags:
+  - Environment
+  - Modeling
+  - Risk
+  - Climate
+  humanURL: https://docs.firststreet.org/api
+  properties:
+  - url: https://firststreet.org/
+    type: Website
+  - url: https://docs.firststreet.org/api
+    type: Documentation
+  description: >-
+    The Climate Risk API provides physical climate risk data globally, delivering property-level insights
+    into hazards including flood, wildfire, heat, wind, and air quality.
+- aid: first-street:enterprise
+  name: First Street Enterprise API
+  tags:
+  - Environment
+  - Modeling
+  - Risk
+  - Climate
+  humanURL: https://docs.firststreet.org/api
+  properties:
+  - url: https://firststreet.org/
+    type: Website
+  - url: https://docs.firststreet.org/api
+    type: Documentation
+  description: >-
+    The Enterprise API offers aggregated climate risk views for portfolios, enabling enterprise users
+    to assess risk across multiple properties and geographic regions.
+- aid: first-street:raster-map
+  name: First Street Raster Map API
+  tags:
+  - Environment
+  - Modeling
+  - Risk
+  - Climate
+  - Mapping
+  humanURL: https://docs.firststreet.org/api
+  properties:
+  - url: https://firststreet.org/
+    type: Website
+  - url: https://docs.firststreet.org/api
+    type: Documentation
+  description: >-
+    The Raster Map API delivers visual raster layers of climate perils for mapping and visualization use
+    cases.
+- aid: first-street:first-street-enterprise-api
+  name: First Street Enterprise API
+  description: The Enterprise API from First Street — 1 operation(s) for enterprise.
+  humanURL: https://docs.firststreet.org/api
+  tags:
+  - Enterprise
+  properties:
+  - type: OpenAPI
+    url: openapi/first-street-enterprise-api-openapi.yml
+- aid: first-street:first-street-graphql-api
+  name: First Street Graphql API
+  description: The Graphql API from First Street — 1 operation(s) for graphql.
+  humanURL: https://docs.firststreet.org/api
+  tags:
+  - Graphql
+  properties:
+  - type: OpenAPI
+    url: openapi/first-street-graphql-api-openapi.yml
+- aid: first-street:first-street-maps-api
+  name: First Street Maps API
+  description: The Maps API from First Street — 1 operation(s) for maps.
+  humanURL: https://docs.firststreet.org/api
+  tags:
+  - Maps
+  properties:
+  - type: OpenAPI
+    url: openapi/first-street-maps-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/first-street-agentic-access.yml
