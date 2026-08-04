@@ -1,0 +1,18 @@
+{
+  "provider": "first-street",
+  "sources": [
+    "first-street-enterprise-api-openapi.yml",
+    "first-street-graphql-api-openapi.yml",
+    "first-street-maps-api-openapi.yml"
+  ],
+  "outputs": [
+    "first-street-enterprise-api-openapi.yml",
+    "first-street-graphql-api-openapi.yml",
+    "first-street-maps-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
