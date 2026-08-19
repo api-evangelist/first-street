@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "First Street Enterprise Graphql API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "key",
+      "value": "{{key}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Graphql",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Climate Risk GraphQL endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.firststreet.org/v3/graphql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Run queries and mutations against the Climate Risk GraphQL schema for point and parcel-level climate risk (flood, fire, heat, wind, air)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
