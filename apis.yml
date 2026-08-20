@@ -97,6 +97,8 @@ apis:
   description: The Graphql API from First Street — 1 operation(s) for graphql.
   humanURL: https://docs.firststreet.org/api
   tags:
+  - GraphQL
+  tags_raw:
   - Graphql
   properties:
   - type: OpenAPI
