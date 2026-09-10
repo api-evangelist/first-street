@@ -1,0 +1,156 @@
+generated: '2026-09-10'
+method: derived
+source: >-
+  mcp/first-street-mcp-tools.json (anonymous tools/list, HTTP 200),
+  graphql/first-street-climate-risk-api.graphql (first-party SDL published at
+  github.com/FirstStreet/api), openapi/*-openapi.yml
+description: >-
+  Binds each First Street MCP tool to the surface that actually backs it. The important
+  finding here is a shape mismatch, not a gap: First Street's REST surface is a single
+  GraphQL passthrough endpoint per API plus a tile endpoint, so almost every MCP tool
+  binds to a GraphQL FIELD rather than to a REST operationId. Mapping tools only against
+  the OpenAPI would report 9 of 10 tools as unbacked, which would be wrong.
+
+surfaces:
+  openapi:
+    files:
+      - openapi/first-street-graphql-api-openapi.yml
+      - openapi/first-street-enterprise-api-openapi.yml
+      - openapi/first-street-maps-api-openapi.yml
+    operations: 3
+    note: >-
+      The REST surface is thin by design — two GraphQL transport endpoints and one raster
+      tile endpoint. It is not a resource-per-path REST API.
+  graphql:
+    - name: climate-risk
+      endpoint: https://api.firststreet.org/v3/graphql
+      sdl: graphql/first-street-climate-risk-api.graphql
+      introspection: gated
+      introspection_note: 'POST {__schema{queryType{name}}} returned HTTP 401 Invalid API Key'
+      query_fields: 11
+      mutation_fields: 0
+    - name: enterprise
+      endpoint: https://api.firststreet.org/enterprise/graphql
+      sdl: graphql/first-street-enterprise-api.graphql
+      introspection: open
+      introspection_note: >-
+        Full introspection answered anonymously, HTTP 200, 350 types. Saved to
+        graphql/first-street-enterprise-introspection.json. Data queries still 401.
+      query_fields: 25
+      mutation_fields: 42
+  mcp:
+    url: https://mcp.firststreet.org/mcp
+    tools_list: open
+    tools_list_note: 'tools/list answered anonymously, HTTP 200, real inputSchema per tool'
+    tool_count: 10
+    scope: Climate Risk API only
+
+crosswalk:
+  - tool: get_place_by_address
+    category: property-lookup
+    graphql: [climate-risk:Query.placeByAddress]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+    note: REST binding is the generic GraphQL transport operation, not a dedicated endpoint.
+  - tool: get_place_by_coordinate
+    category: property-lookup
+    graphql: [climate-risk:Query.placeByCoordinate]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+  - tool: get_place_by_id
+    category: property-lookup
+    graphql: [climate-risk:Query.place]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+  - tool: find_buildings
+    category: geospatial
+    graphql: [climate-risk:Query.geospatial]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: medium
+    note: >-
+      Mapped by semantics — the tool takes a GeoJSON polygon and returns buildings, which
+      is what Query.geospatial covers. Exact sub-selection not observable without a key.
+  - tool: get_adaptations
+    category: adaptation
+    graphql: [climate-risk:Query.adaptations]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+  - tool: search_localities
+    category: macroeconomic
+    graphql: [climate-risk:Query.localitiesByMacroeconomicConnection]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: medium
+    note: >-
+      Relay connection with first/after — matches the tool's first/after cursor params.
+      localitiesByInsuranceConnection is a sibling with no tool.
+  - tool: get_locality
+    category: macroeconomic
+    graphql: [climate-risk:Query.locality]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+  - tool: get_asset_types
+    category: metadata
+    graphql: [climate-risk:Query.assetTypes]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+  - tool: get_metadata
+    category: metadata
+    graphql: [climate-risk:Query.metadataLookup]
+    rest: [climateRiskGraphql]
+    binding: graphql
+    confidence: high
+  - tool: execute_graphql
+    category: escape-hatch
+    graphql: ['climate-risk:*']
+    rest: [climateRiskGraphql]
+    binding: rest
+    confidence: high
+    note: >-
+      Arbitrary query passthrough. This single tool nominally covers the whole Climate
+      Risk schema, but with no typed inputSchema an agent gets no help composing it.
+
+mcp_only: []
+
+graphql_only:
+  - field: climate-risk:Query.localitiesByInsuranceConnection
+    reason: Insurance-impact locality search has no dedicated MCP tool.
+  - field: climate-risk:Query.version
+    reason: Schema/vintage version probe has no dedicated MCP tool.
+
+rest_only:
+  - operation: getRasterTile
+    api: First Street Raster Map API
+    reason: >-
+      No MCP tool exposes map tiles. A PNG tile is not a useful MCP result shape, and the
+      docs scope the MCP server to the Climate Risk API.
+  - operation: enterpriseGraphql
+    api: First Street Enterprise API
+    reason: >-
+      The whole Enterprise surface (25 queries, 42 mutations) is outside the MCP server.
+      Docs say expansion is planned "in the near future".
+
+coverage:
+  tools_named: 10
+  tools_bound: 10
+  mcp_only: 0
+  graphql_fields_climate_risk: 11
+  graphql_fields_with_a_tool: 9
+  graphql_fields_enterprise: 67
+  enterprise_fields_with_a_tool: 0
+  rest_operations: 3
+  rest_operations_with_a_tool: 1
+  agent_reachable_share_of_provider_surface: >-
+    9 of 78 named GraphQL entry points across both schemas are reachable as a typed MCP
+    tool. The Enterprise API — where every write operation lives — has no agent surface.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

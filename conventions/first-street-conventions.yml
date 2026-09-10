@@ -1,0 +1,199 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  https://docs.firststreet.org/api/ (authorization, rate-limits, response-codes,
+  graphql-apis, connections, error-handling, asynchronous-data-retrevial, data-vintage,
+  raster-map-api/*) and the first-party GraphQL SDLs at github.com/FirstStreet/api
+description: >-
+  Cross-cutting request/response semantics for the First Street surface. The governing
+  fact for an integrator is that this is a MODELLING API, not a lookup API: a query kicks
+  off per-peril computation and returns a status enum, so correctness depends on polling
+  and on reading the status before the data.
+
+authentication:
+  style: api-key
+  transports:
+    - {kind: query-parameter, name: key, example: 'https://api.firststreet.org/v3/graphql?key={api-key}'}
+    - {kind: header, name: Authorization, format: 'Bearer <api-key>'}
+  scoped: false
+  rotation: >-
+    Docs advise regenerating keys periodically and deleting unused keys; no self-serve key
+    management surface is documented — keys are issued with the contract.
+  entitlement_model: >-
+    Access is granted per SCHEMA NODE by contract. An account may hold a valid key and
+    still be refused an individual field (see errors/ "Error 15"). Entitlement is
+    therefore part of the request contract, not just a billing concern.
+  docs: https://docs.firststreet.org/api/climate-risk-api/getting-started/authorization
+  artifact: authentication/first-street-authentication.yml
+
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  note: >-
+    First Street publishes no idempotency contract. There is no Idempotency-Key header, no
+    request-key parameter, no documented replay window and no deduplication guarantee
+    anywhere in the docs or either SDL. The single occurrence of the word in the whole
+    surface is a description on one Enterprise mutation —
+    "setValueChainRevenue ... Idempotent: replaces the previous map for this projectJobId"
+    — which states replace semantics for that one field-set, not a replay-protection
+    mechanism for the 42-mutation write surface. Recording this as `partial` would credit
+    a mechanism that does not exist.
+  read_side_note: >-
+    The Climate Risk API is read-only, so the exposure is confined to the Enterprise API's
+    mutations — project creation, asset import, exports and deletes, which are exactly the
+    operations where a retried agent call is expensive.
+
+reversibility:
+  grade: documented
+  applicable: true
+  applicable_note: >-
+    The Climate Risk API and the Raster Map API are read-only — reversibility is `na`
+    there. Everything below concerns the Enterprise API's 42 mutations.
+  surfaces:
+    - write: createProject
+      reversal: setProjectStatus (ProjectStatus.ARCHIVED) or deleteProjectAsync
+      operationId: setProjectStatus
+      window: null
+      window_stated: false
+      grade: documented
+      note: >-
+        ProjectStatus is an enum of ACTIVE / ARCHIVED / LOCKED, so archiving is reversible
+        by setting the status back to ACTIVE. No time limit is stated either way.
+    - write: createProjectExport
+      reversal: cancelProjectExport
+      operationId: cancelProjectExport
+      window: while the export job is still running
+      window_stated: false
+      grade: documented
+      note: >-
+        A genuine cancel path, but the docs state no cutoff — an agent cannot tell whether
+        a cancel after completion is a no-op or an error.
+    - write: deleteProject / deleteProjectAsync
+      reversal: null
+      window: null
+      window_stated: false
+      grade: none
+      note: >-
+        "Delete a project along with all of its associated resources." No restore, undelete
+        or trash operation exists in the schema. This is irreversible and undated.
+    - write: deleteUserData
+      reversal: null
+      grade: none
+      note: Irreversible by design (data-subject deletion).
+    - write: importProjectAssets / createProjectJobUploadLink
+      reversal: deleteProjectAssetByPlaceID (per asset)
+      window: null
+      window_stated: false
+      grade: documented
+      note: >-
+        Assets can be removed one Place ID at a time; there is no bulk unwind of an
+        import job.
+    - write: movePortfolio / moveRealEstateAssetToNewParent / moveNonRealEstateAssetToNewParent
+      reversal: the inverse move
+      window: null
+      window_stated: false
+      grade: documented
+      note: Structurally reversible by moving back; not declared as a reversal operation.
+  retention_windows_stated:
+    - >-
+      Uploaded portfolio files are "automatically deleted after 7 days"
+      (https://docs.firststreet.org/api/enterprise-api/workflow/upload-assets). This is a
+      retention window, NOT a reversal window — it bounds how long the source file exists,
+      not how long a write can be taken back.
+  summary: >-
+    Every reversal path First Street ships is undated, and the two most consequential
+    writes (project delete, user-data delete) have no reversal path at all. Grade is
+    `documented` rather than `verified` because no window is stated anywhere.
+
+pagination:
+  style: relay-cursor-connections
+  arguments: [first, after, sort]
+  response_fields: ['edges { node cursor }', 'pageInfo { hasNextPage endCursor }']
+  naming: Connection-suffixed fields (localitiesByMacroeconomicConnection, projectsConnection, viewedPlacesConnection...)
+  page_size_limits:
+    - {surface: 'MCP search_localities', max: 50, field: first}
+  docs: https://docs.firststreet.org/api/available-api/graphql-apis/connections
+  spec: https://graphql.org/learn/pagination/#complete-connection-model
+
+async_semantics:
+  model: poll-on-status
+  status_field: '<peril> { status { name } }'
+  status_type: FSModelResponseStatus
+  states: [PENDING, RUNNING, SUCCESS, FAILED, TIMEOUT, ERROR]
+  guidance: >-
+    Query status and data in the same selection and poll until status.name is terminal.
+    Read status.name BEFORE consuming data — a peril that is still modelling returns a
+    null data branch with a 200. Docs show a Python example with a configurable
+    POLL_INTERVAL (2s in the sample).
+  docs: https://docs.firststreet.org/api/climate-risk-api/asynchronous-data-retrevial
+  note: >-
+    This replaced the synchronous behaviour of the v2 US-domestic API and is called out in
+    the migration guide as a new requirement.
+
+versioning:
+  api: uri-path (/v3/graphql, /enterprise/graphql, /v2/maps/tile)
+  data: vintage (current Vintage 4 since 2026-07-01; two vintages retained)
+  pin: 'options: { vintageId: N }'
+  default_behaviour: unpinned queries always resolve to the latest vintage
+  artifact: lifecycle/first-street-lifecycle.yml
+
+error_envelope:
+  rest: '{"error":{"code","message"}}'
+  graphql: 'HTTP 200 + { errors: [{message, path, locations, extensions}], data }'
+  partial_success: true
+  problem_json: false
+  artifact: errors/first-street-error-codes.yml
+
+request_tracing:
+  request_id_header: null
+  request_id_in_error_message: true
+  format: 'RequestID: <32 hex chars>, appended to GraphQL error messages'
+  note: >-
+    There is no X-Request-Id response header documented. The correlation id is only
+    surfaced inside an error string, so a successful call cannot be correlated with a
+    provider-side trace.
+
+rate_limit_signaling:
+  headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
+  exhaustion_status: 429
+  retry_after: false
+  artifact: rate-limits/first-street-rate-limits.yml
+
+field_selection:
+  mechanism: GraphQL selection sets
+  cost_control: >-
+    Query complexity is scored server-side against a limit of 700; over-broad selections
+    are rejected regardless of the request-rate limit.
+  sparse_fields: n/a (GraphQL)
+  expansion: n/a (GraphQL)
+
+dry_run_mode:
+  supported: false
+  note: >-
+    No dry-run, preview or validate-only mode on any Enterprise mutation. The nearest
+    equivalent is the two-phase asset workflow — upload creates a Job whose STAGED assets
+    can be inspected and validated before being committed to a Project — which is a
+    rehearsal step for exactly one flow, not a general dry-run.
+
+subscriptions:
+  supported: false
+  evidence: 'Docs: "APIs provided by First Street do not support subscriptions."'
+
+client_side_key_handling:
+  guidance: >-
+    Docs require proxying Raster Map tile requests through your own backend so the API key
+    is never exposed to a browser, and give Node/Express pseudo-code for it. Leaked keys
+    should be reported to security@firststreet.org.
+
+cross_links:
+  authentication: authentication/first-street-authentication.yml
+  errors: errors/first-street-error-codes.yml
+  lifecycle: lifecycle/first-street-lifecycle.yml
+  rate_limits: rate-limits/first-street-rate-limits.yml
+  conformance: conformance/first-street-conformance.yml
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,6 +1,12 @@
-generated: '2026-07-11'
+generated: '2026-09-10'
 method: probed
-source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+source: live DNS/TLS/HTTP probes of every host this record knows
+note: >-
+  Extends the automated probe (0-working/probe-domain-security.py), which only reads hosts
+  named in apis.yml/OpenAPI and therefore missed mcp, auth, app, status and the trust
+  centre. It also recorded spf: false for firststreet.org, which is WRONG — the apex
+  publishes a valid SPF record; the domain carries twelve TXT records and the probe read
+  the wrong one. The corrected value and the record itself are below.
 hosts:
 - host: firststreet.org
   https: true
@@ -11,18 +17,89 @@ hosts:
 - host: docs.firststreet.org
   https: true
   tls_version: TLSv1.3
-  cert_expires: Sep  1 06:02:00 2026 GMT
+  cert_expires: Oct 30 06:29:53 2026 GMT
   hsts: true
   hsts_max_age: 31536000
+  note: GitBook-hosted.
 - host: api.firststreet.org
   https: true
   tls_version: TLSv1.3
   cert_expires: Dec 10 23:59:59 2026 GMT
-  hsts: null
+  hsts: false
+  hsts_max_age: null
+  note: >-
+    The API host is the only First Street host with NO HSTS header. Every other host in
+    this list sets one, several with preload. Given that the documented authentication
+    style puts the API key in a query string, a missing HSTS on the credential-bearing
+    host is the most actionable finding in this file.
+- host: mcp.firststreet.org
+  https: true
+  tls_version: null
+  cert_expires: Dec 10 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+  hsts_preload: true
+  hsts_include_subdomains: true
+- host: auth.firststreet.org
+  https: true
+  tls_version: null
+  cert_expires: Dec 10 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  note: SAML SP metadata host.
+- host: app.firststreet.org
+  https: true
+  tls_version: null
+  cert_expires: Dec 10 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+  hsts_preload: true
+  hsts_include_subdomains: true
+  note: Enterprise Suite application.
+- host: status.firststreet.org
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov  5 13:37:22 2026 GMT
+  hsts: true
+  hsts_max_age: 63113904
+  hsts_preload: true
+  hsts_include_subdomains: true
+  note: Better Stack status page.
+- host: security.firststreet.org
+  https: true
+  tls_version: null
+  cert_expires: Oct 19 10:14:03 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  note: Vanta trust centre.
 domains:
 - domain: firststreet.org
   dnssec: false
   caa: []
+  caa_note: No CAA record — any CA may issue for this domain.
   spf: true
+  spf_record: >-
+    v=spf1 a include:_spf.google.com include:44226531.spf04.hubspotemail.net
+    include:mail.zendesk.com include:servers.mcsv.net include:amazonses.com ~all
+  spf_qualifier: '~all (softfail)'
   dmarc: true
   dmarc_policy: quarantine
+  dmarc_record: 'v=DMARC1; p=quarantine; rua=mailto:tech@firststreet.org; adkim=r; aspf=r'
+  dmarc_alignment: relaxed (adkim=r, aspf=r)
+findings:
+  - >-
+    api.firststreet.org serves no Strict-Transport-Security header while every other
+    First Street host does — including mcp, app and auth with preload.
+  - >-
+    No DNSSEC and no CAA record on firststreet.org.
+  - >-
+    DMARC is at p=quarantine with relaxed alignment and a softfail SPF, rather than
+    p=reject with strict alignment.
+  - >-
+    The apex TXT set names the vendor estate — Google Workspace SAML, HubSpot, Zendesk,
+    Mailchimp, Amazon SES, Zoom, 1Password, Wiz and Better Stack.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

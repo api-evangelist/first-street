@@ -1,0 +1,132 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  https://docs.firststreet.org/api/climate-risk-api/data-vintage,
+  https://docs.firststreet.org/api, https://status.firststreet.org/,
+  github.com/FirstStreet/api, and the deprecation directives in the published SDLs
+description: >-
+  First Street versions its DATA, not just its API. A "vintage" is a model release; the
+  API keeps exactly two of them addressable at a time. That is a real, unusual and
+  under-advertised lifecycle contract, and it is the one an integrator has to plan around.
+
+versioning:
+  scheme: uri-path + data-vintage
+  api_versions:
+    - {version: v3, surface: Climate Risk GraphQL, path: /v3/graphql, status: current}
+    - {version: enterprise, surface: Enterprise GraphQL, path: /enterprise/graphql, status: current}
+    - {version: v2, surface: Raster Map tiles, path: '/v2/maps/tile/...', status: current}
+    - {version: v2, surface: US Domestic GraphQL API, status: maintenance, note: 'Docs: "This API is considered under maintenance and its offerings are limited to existing users." Docs remain at https://docs.firststreet.org/domestic-api'}
+  data_vintage:
+    current: Vintage 4
+    current_since: '2026-07-01'
+    retention: 2 vintages (latest and previous)
+    default: >-
+      Queries without an explicit vintage always receive the latest vintage — so a caller
+      who pins nothing is silently upgraded on each model release.
+    pin_mechanism: 'place(placeId: "...", options: { vintageId: N })'
+    introspect: 'place.vintage { vintageId releaseDate }'
+    docs: https://docs.firststreet.org/api/climate-risk-api/data-vintage
+    agent_warning: >-
+      A vintage rollover changes modelled values for the same property without any change
+      to the query, the schema or the endpoint. Two vintages of history is the entire
+      reproducibility window.
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  mechanism: in-schema
+  mechanism_note: >-
+    There is no written deprecation policy, no Sunset/Deprecation header support and no
+    stated notice period. Deprecation is communicated ONLY through the GraphQL
+    @deprecated directive in the published SDL, which is machine-readable but gives no
+    removal date.
+  deprecated_members:
+    climate_risk_api: 15
+    enterprise_api: 42
+    us_domestic_api: 37
+  patterns:
+    - >-
+      The peril *Factor / factorScale scalars are deprecated across every hazard in favour
+      of factorScore.score / factorScore.scale, "for more granular breakdown by SSP and
+      Year" — e.g. AssetClimateExposureFlood.floodFactor, .heatFactor, .windFactor,
+      .fireFactor, .coldFactor, .droughtFactor. Every corresponding AssetSort enum value
+      (CLIMATE_EXPOSURE_*_FACTOR_ASC/DESC) is deprecated with it.
+    - >-
+      Mutation.deleteProject is deprecated in favour of deleteProjectAsync — a
+      synchronous-to-asynchronous migration on a destructive operation.
+    - >-
+      Ten LocalityMacroeconomicData change-factor fields are marked "This parameter is
+      obsolete."
+    - >-
+      Company.industryId / Company.sectorId replaced by company.industry.id /
+      company.sector.id; Project.vintage replaced by vintageId.
+  examples:
+    - {member: 'Mutation.deleteProject', replacement: deleteProjectAsync, source: graphql/first-street-enterprise-api.graphql}
+    - {member: 'AssetClimateExposureFlood.floodFactor', replacement: factorScore.score, source: graphql/first-street-enterprise-api.graphql}
+    - {member: 'Project.vintage', replacement: vintageId, source: graphql/first-street-enterprise-api.graphql}
+
+status_page:
+  url: https://status.firststreet.org/
+  platform: Better Stack
+  feeds:
+    rss: https://status.firststreet.org/feed.rss
+    note: >-
+      /feed.rss returns application/rss+xml. The Atom and JSON links advertised on the
+      page are rendered client-side and were not resolvable to a static URL from the
+      server-side HTML.
+  subscriptions: [email, rss, atom, json, webhook, slack]
+  monitored_components:
+    - First Street Application
+    - FirstStreet.org
+    - First Street Enterprise Platform
+    - First Street Domestic Enterprise Suite
+    - First Street API
+    - Climate Risk API
+    - Domestic API
+    - Auth Service
+    - MCP Server
+    - Report Generation Service
+    - Flood Map Tiles
+    - Wildfire Map Tiles
+    - Heat Map Tiles
+    - Wind Map Tiles
+    - Air Quality Map Tiles
+  note: >-
+    The MCP Server is a first-class monitored component — the provider treats the agent
+    surface as production infrastructure, which is still rare.
+  recent_incidents:
+    - {date: '2026-08-21', title: Intermittent load issue}
+    - {date: '2026-05-09', title: Upstream Provider Issues}
+    - {date: '2026-03-13', title: Enterprise Property Pages Missing Data}
+    - {date: '2025-12-11', title: Enterprise Platform Maintenance, kind: scheduled}
+    - {date: '2025-11-20', title: Missing Peril Data}
+
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No public SLA. The status page shows per-component uptime history but publishes no
+    contractual target. Docs repeatedly state that access, limits and features "differ by
+    contractual agreement" — the SLA is in the contract, not on the site.
+
+support:
+  api: api@firststreet.org
+  security: security@firststreet.org
+  sales: bd@firststreet.org
+  press: pr@firststreet.org
+
+ownership:
+  parent: MSCI Inc.
+  event: acquisition
+  completed: '2026-08-03'
+  announced: '2026-06-24'
+  evidence: https://www.msci.com/discover-msci/media-room/msci-completes-acquisition-of-first-street
+  surface_impact: >-
+    firststreet.org now serves an MSCI terms-of-use consent interstitial and links MSCI's
+    legal pages; app.firststreet.org ships a firststreet-logo-msci.svg. The API hosts,
+    docs and MCP endpoint are unchanged.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

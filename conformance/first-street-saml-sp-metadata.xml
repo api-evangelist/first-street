@@ -1,0 +1,18 @@
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2026-09-12T21:51:48.686Z" entityID="https://auth.firststreet.org/sso/saml/metadata">
+  <SPSSODescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2026-09-12T21:51:48.685907502Z" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="false" WantAssertionsSigned="true">
+    <KeyDescriptor use="encryption">
+      <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <X509Data xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <X509Certificate xmlns="http://www.w3.org/2000/09/xmldsig#">MIIDdTCCAl2gAwIBAgIBATANBgkqhkiG9w0BAQsFADBZMQswCQYDVQQGEwJVUzEJMAcGA1UECBMAMQkwBwYDVQQHEwAxCTAHBgNVBAkTADEJMAcGA1UEERMAMR4wHAYDVQQKExVTQU1MIFNlcnZpY2UgUHJvdmlkZXIwHhcNMjUwOTAzMTU0NjA3WhcNMjYwOTAzMTU0NjA3WjBZMQswCQYDVQQGEwJVUzEJMAcGA1UECBMAMQkwBwYDVQQHEwAxCTAHBgNVBAkTADEJMAcGA1UEERMAMR4wHAYDVQQKExVTQU1MIFNlcnZpY2UgUHJvdmlkZXIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMk7BK+2/YQVA/6r2oeku7RP6PsNsNmGq3vG7WutVWfPFKXBB6oK+KIJGvaAO+B4SINZp11cec9Eru39oafOtX61hmtcNCGlbHzFLEyewWm2EjMmpbuTYUMdJ4arYMh+UTw1wyQ0OnBqV3yMJcrp1bw2Idg//S8SbcMYSvEMzsTu7Q8HxUwTHS5HeFwiBBcHAb9nls3lW/apV/KgTHyLBgVBWeJPRwj9guAIN2Cr4Ajwib+yoyG6zSpB8BIqPMS1qQhuitIaUQrEVNQjXI+t8qLkqBSZJzaCXemncuqFFTuqAnM6LeEDa44kHuFqZVfuuvaQuT4trJpi/mvzG1Ep1HAgMBAAGjSDBGMA4GA1UdDwEB/wQEAwIFoDATBgNVHSUEDDAKBggrBgEFBQcDATAfBgNVHREEGDAWghRhdXRoLmZpcnN0c3RyZWV0Lm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAukRW+W6pkXU5IPuK3Uy2A9HOZmDWgyR2l31M42BB3l3kph3pLEOfRj3QX1Pb7eie/cVGw1I+D80bVNmImPEuKLQr/VqrQ7Feg/Lm+gjf6RlkE0AhjCcHJTHAzQeLCiXh82ZMWcTYsusqTCXJGfuOsQm8/I2oCPp8InF9BMxd0yl4zPd/kIqzDMJgV8DhFxfhtvkfB/wFdGUJzV8gZj29QN/lYppD/RgBJS9PqdfpyQbuKIm8M5+edorfXkp6p7IqgfrEKeFJl/lC0gXpV8vI8pLSZ78rkulZh8/HWYi3bK4y7iZIbKfEGRezQ55TIn1LYpFpMU069t1w7lCluMMqXQ==</X509Certificate>
+        </X509Data>
+      </KeyInfo>
+      <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"></EncryptionMethod>
+      <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes192-cbc"></EncryptionMethod>
+      <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"></EncryptionMethod>
+      <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"></EncryptionMethod>
+    </KeyDescriptor>
+    <NameIDFormat></NameIDFormat>
+    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://auth.firststreet.org/sso/saml/acs" index="1"></AssertionConsumerService>
+    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://auth.firststreet.org/sso/saml/acs" index="2"></AssertionConsumerService>
+  </SPSSODescriptor>
+</EntityDescriptor>

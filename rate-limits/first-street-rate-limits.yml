@@ -3,11 +3,11 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: First Street
 providerId: first-street
+generated: '2026-09-10'
+method: searched
+source: https://docs.firststreet.org/api/climate-risk-api/getting-started/rate-limits
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+modified: '2026-09-10'
 tags:
   - Environment
   - Modeling
@@ -16,86 +16,95 @@ tags:
   - Rate Limiting
   - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the First Street API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+description: >-
+  First Street's published rate limits, replacing the 2026-05-04 scaffold that carried
+  invented free/pro/enterprise tiers. The real contract has ONE published default —
+  150 requests per minute — and everything else is negotiated. It also carries a second,
+  independent ceiling most catalogs miss: a query-complexity budget of 700 that can reject
+  a single request no matter how slowly you send them.
+limit_count: 2
+
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: x-ratelimit-limit
+  remaining: x-ratelimit-remaining
+  reset: x-ratelimit-reset
+  retryAfter: null
+header_semantics:
+  x-ratelimit-limit: The max number of requests available during the cycle (the rate limit).
+  x-ratelimit-remaining: The amount of requests remaining in the current 1 minute cycle.
+  x-ratelimit-reset: The number of seconds until remaining limits reset.
+  note: >-
+    No Retry-After and no RateLimit-Policy is documented; x-ratelimit-reset is the only
+    backoff signal an agent gets.
+
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+
 limits:
-  - tier: free
-    name: Free Tier Default
+  - name: Default request limit
     scope: api-key
     metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
+    limit: 150
+    window: minute
+    burst: null
+    tier: default
+    negotiable: true
+    note: >-
+      "Default request limiting starts at 150 requests per minute but is adjusted based on
+      individual contract agreements."
     applies:
       - First Street Climate Risk API
       - First Street Enterprise API
       - First Street Raster Map API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
+
+  - name: Query complexity budget
+    scope: request
+    metric: complexity_score
+    limit: 700
+    window: per-request
+    tier: default
+    negotiable: false
+    note: >-
+      "Query complexity is based off of the data fields requested in a query ... The
+      current query complexity limit is set to 700 which should satisfy 99% of all user
+      requests." A second, orthogonal ceiling: a wide GraphQL selection can be rejected
+      even when the caller is well inside the per-minute limit. The scoring algorithm is
+      internal and not published, so the cost of a given query cannot be computed client
+      side.
     applies:
       - First Street Climate Risk API
       - First Street Enterprise API
-      - First Street Raster Map API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - First Street Climate Risk API
-      - First Street Enterprise API
-      - First Street Raster Map API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - First Street Climate Risk API
-      - First Street Enterprise API
-      - First Street Raster Map API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - First Street Climate Risk API
-      - First Street Enterprise API
-      - First Street Raster Map API
+
+service_specific:
+  supported: true
+  note: >-
+    "We may apply isolated rate limits to individual services when requested. For example,
+    a limit of 150 requests per limit may be applied to our GraphQL API while a limit of
+    1000/requests per limit may be applied to our Tiles API. These limits will be based on
+    contractual agreements and applied during key retrevial."
+  example_tiles_limit: 1000 requests per minute (illustrative, contractual)
+
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Contractual adjustment
+    description: >-
+      Every published number is a starting point. Actual limits are set per contract and
+      bound to the key at issuance, so two keys against the same endpoint can have
+      different ceilings.
+  - name: Playground counts against usage
+    description: >-
+      Requests made through the GraphiQL Playground are ordinary API requests and count
+      toward account usage; there is no free evaluation lane.
+  - name: Tile usage counts
+    description: >-
+      Map tile requests, including those made from the published Mapbox/Google Maps
+      examples, count toward overall API usage.
+
+not_published:
+  - A monthly or annual request quota
+  - A burst allowance
+  - Per-endpoint limits (offered on request, never published as numbers)
+  - Retry-After on 429
+
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

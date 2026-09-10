@@ -1,0 +1,75 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.firststreet.org/api/climate-risk-api/getting-started/playground
+description: >-
+  First Street ships an interactive console but NOT a sandbox. That distinction is the
+  whole finding here: there is no test mode, no test key prefix, no fixture data and no
+  free evaluation lane. Every request you make while learning the API is a billable
+  production request against your contracted quota.
+
+console:
+  type: graphiql
+  name: Playground
+  url_template: 'https://api.firststreet.org/v3/playground?key={YOUR_API_KEY}'
+  requires_key: true
+  scope: Climate Risk API (v3 GraphQL)
+  what_it_gives_you: >-
+    "The full GraphQL documentation is available within the Playground" — the schema
+    docs pane is the reference. There is no separately published field-by-field reference
+    on the docs site; the SDL in graphql/ and the Playground are the reference.
+  billing_warning: >-
+    Verbatim from the docs: "Requests made through the Playground are API requests that
+    count towards API usage on your account. There is no differentiation between these
+    requests and integration requests."
+
+test_environment:
+  exists: false
+  test_mode: false
+  key_prefixes: {test: null, live: null}
+  note: >-
+    One key, one environment. Nothing in the docs distinguishes a test credential from a
+    production one, and nothing describes a staging host.
+
+test_data:
+  fixtures: false
+  magic_values: false
+  published_examples:
+    - kind: address
+      value: '247 Water Street Brooklyn NY'
+      source: https://docs.firststreet.org/api/available-api/graphql-apis/error-handling
+      note: >-
+        Used in the docs' error-handling examples with the returned fsid 362104205. This
+        is a real property used for illustration, not a reserved test fixture.
+    - kind: placeId
+      value: dqbutwn70
+      source: https://docs.firststreet.org/api/climate-risk-api/data-vintage
+      note: Used in the vintage-pinning example.
+    - kind: tile
+      value: '/globalflood/probability/depth/0/245/500/12/1171/1561.png'
+      source: https://docs.firststreet.org/api/raster-map-api/available-tiles
+      note: A real tile coordinate used as a worked example.
+  caution: >-
+    These are documentation examples, not sanctioned test values. Calling them consumes
+    quota exactly like any other request.
+
+staging_rehearsal:
+  exists: partial
+  mechanism: staged assets
+  surface: Enterprise API
+  description: >-
+    The Enterprise asset workflow has a genuine rehearsal step: a portfolio upload creates
+    a Job whose assets sit in a STAGED state and can be inspected and validated before the
+    ProjectJobID is committed to a Project. It is a two-phase commit for one flow, not a
+    sandbox, and it does not extend to the rest of the mutation surface.
+  docs: https://docs.firststreet.org/api/enterprise-api/workflow/staged-assets
+
+runnable_demos:
+  caution: 'Docs note these requests count toward overall API usage.'
+  demos:
+    - {kind: codepen, framework: Mapbox, url: 'https://codepen.io/seripap/pen/GRYErQX', note: requires your own key}
+    - {kind: codepen, framework: Google Maps, url: 'https://codepen.io/seripap/pen/qBpwRLb', note: requires your own key}
+    - {kind: jsfiddle, framework: Google Maps, url: 'https://jsfiddle.net/excellent/zc2p8ro9/', note: requires your own key}
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

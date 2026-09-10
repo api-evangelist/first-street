@@ -1,0 +1,567 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "tools": [
+      {
+        "description": "Execute an arbitrary GraphQL query against the First Street v3 API. Use this for complex or custom queries not covered by the other tools. Provide a valid GraphQL query string and optional variables.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "GraphQL query string"
+            },
+            "variables": {
+              "type": "object",
+              "description": "GraphQL variables",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        },
+        "name": "execute_graphql"
+      },
+      {
+        "description": "Find buildings within a geographic area defined by a GeoJSON polygon. Returns building locations, asset types, and Place IDs. Area must not exceed 9 km\u00b2.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "area": {
+              "type": "string",
+              "description": "GeoJSON Polygon or MultiPolygon defining the search area (max 9 km\u00b2)"
+            }
+          },
+          "required": [
+            "area"
+          ],
+          "additionalProperties": false
+        },
+        "name": "find_buildings"
+      },
+      {
+        "description": "Get climate adaptation recommendations and cost-benefit analysis for a property. Shows possible flood barriers, fire-proofing, defensible space, roof upgrades, and wind design improvements with payback periods.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "placeId": {
+              "type": "string",
+              "description": "First Street Place ID"
+            },
+            "holdPeriod": {
+              "type": "integer",
+              "description": "hold period of the asset in years"
+            },
+            "ssp": {
+              "type": "string",
+              "description": "socio-economic pathway: SSP_1_26 (optimistic) or SSP_2_45 (moderate) or SSP_5_85 (pessimistic)"
+            }
+          },
+          "required": [
+            "placeId",
+            "holdPeriod",
+            "ssp"
+          ],
+          "additionalProperties": false
+        },
+        "name": "get_adaptations"
+      },
+      {
+        "description": "List all supported asset type IDs with human-readable descriptions (residential, commercial, industrial, infrastructure, etc.).",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false
+        },
+        "name": "get_asset_types"
+      },
+      {
+        "description": "Look up locality (country, state, county, or metro area) data by locality ID. Returns macroeconomic indicators and bounding box.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "localityId": {
+              "type": "integer",
+              "description": "First Street Locality ID"
+            }
+          },
+          "required": [
+            "localityId"
+          ],
+          "additionalProperties": false
+        },
+        "name": "get_locality"
+      },
+      {
+        "description": "Get API metadata including available data vintages, industry classifications, and sector classifications.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false
+        },
+        "name": "get_metadata"
+      },
+      {
+        "description": "Look up a property by street address. Returns climate risk data including flood, wildfire, wind, hail, heat, cold, and drought factors. Optionally provide lat/lng to improve address matching and custom building details to override defaults.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "street address to look up"
+            },
+            "lat": {
+              "type": [
+                "null",
+                "number"
+              ],
+              "description": "latitude to improve address matching"
+            },
+            "lng": {
+              "type": [
+                "null",
+                "number"
+              ],
+              "description": "longitude to improve address matching"
+            },
+            "building": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "properties": {
+                "assetTypeId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "asset type ID (use get_asset_types to list valid IDs)"
+                },
+                "basement": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "basement status: NONE, FINISHED, or UNFINISHED"
+                },
+                "buildingSf": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "floor size in square feet"
+                },
+                "constructionType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "construction material: FRAME, MASONRY, CONCRETE, STEEL, WOOD, BRICK, METAL, etc."
+                },
+                "foundationType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "foundation type: SLAB, CRAWL_OR_RAISED, PILING, PIERS, CONCRETE, etc."
+                },
+                "foundationHeight": {
+                  "type": [
+                    "null",
+                    "number"
+                  ],
+                  "description": "first floor elevation height in feet"
+                },
+                "roofType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "roofing material: ASPHALT, METAL, TILE, WOOD, SLATE, CONCRETE, etc."
+                },
+                "stories": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "number of stories (default 1)"
+                },
+                "yearBuilt": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "year of construction"
+                },
+                "units": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "number of units in structure (default 1)"
+                },
+                "windDesignStandard": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "wind design standard: LOW, MEDIUM, or HIGH"
+                },
+                "defensibleSpace": {
+                  "type": [
+                    "null",
+                    "boolean"
+                  ],
+                  "description": "whether adequate wildfire defensible space exists around the property"
+                },
+                "fireProofing": {
+                  "type": [
+                    "null",
+                    "boolean"
+                  ],
+                  "description": "whether fire proofing measures exist (fire-proofed windows, flame resistant walls, etc.)"
+                },
+                "contentsCost": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "replacement cost of contents within the building in dollars"
+                },
+                "rebuildCostSf": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "rebuild cost per square foot in dollars"
+                }
+              },
+              "description": "optional custom building details to override defaults for risk assessment",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "address"
+          ],
+          "additionalProperties": false
+        },
+        "name": "get_place_by_address"
+      },
+      {
+        "description": "Look up a property by latitude and longitude coordinates. Returns climate risk data including flood, wildfire, wind, hail, heat, cold, and drought factors. Optionally provide custom building details to override defaults.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number",
+              "description": "latitude"
+            },
+            "lng": {
+              "type": "number",
+              "description": "longitude"
+            },
+            "building": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "properties": {
+                "assetTypeId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "asset type ID (use get_asset_types to list valid IDs)"
+                },
+                "basement": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "basement status: NONE, FINISHED, or UNFINISHED"
+                },
+                "buildingSf": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "floor size in square feet"
+                },
+                "constructionType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "construction material: FRAME, MASONRY, CONCRETE, STEEL, WOOD, BRICK, METAL, etc."
+                },
+                "foundationType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "foundation type: SLAB, CRAWL_OR_RAISED, PILING, PIERS, CONCRETE, etc."
+                },
+                "foundationHeight": {
+                  "type": [
+                    "null",
+                    "number"
+                  ],
+                  "description": "first floor elevation height in feet"
+                },
+                "roofType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "roofing material: ASPHALT, METAL, TILE, WOOD, SLATE, CONCRETE, etc."
+                },
+                "stories": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "number of stories (default 1)"
+                },
+                "yearBuilt": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "year of construction"
+                },
+                "units": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "number of units in structure (default 1)"
+                },
+                "windDesignStandard": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "wind design standard: LOW, MEDIUM, or HIGH"
+                },
+                "defensibleSpace": {
+                  "type": [
+                    "null",
+                    "boolean"
+                  ],
+                  "description": "whether adequate wildfire defensible space exists around the property"
+                },
+                "fireProofing": {
+                  "type": [
+                    "null",
+                    "boolean"
+                  ],
+                  "description": "whether fire proofing measures exist (fire-proofed windows, flame resistant walls, etc.)"
+                },
+                "contentsCost": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "replacement cost of contents within the building in dollars"
+                },
+                "rebuildCostSf": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "rebuild cost per square foot in dollars"
+                }
+              },
+              "description": "optional custom building details to override defaults for risk assessment",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "lat",
+            "lng"
+          ],
+          "additionalProperties": false
+        },
+        "name": "get_place_by_coordinate"
+      },
+      {
+        "description": "Look up a property by First Street Place ID. Returns climate risk data including flood, wildfire, wind, hail, heat, cold, and drought factors, plus building details, location geometry, and adaptations. Optionally provide custom building details (stories, sqft, construction type, etc.) to override defaults and get customized risk assessments.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "placeId": {
+              "type": "string",
+              "description": "First Street Place ID"
+            },
+            "building": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "properties": {
+                "assetTypeId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "asset type ID (use get_asset_types to list valid IDs)"
+                },
+                "basement": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "basement status: NONE, FINISHED, or UNFINISHED"
+                },
+                "buildingSf": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "floor size in square feet"
+                },
+                "constructionType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "construction material: FRAME, MASONRY, CONCRETE, STEEL, WOOD, BRICK, METAL, etc."
+                },
+                "foundationType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "foundation type: SLAB, CRAWL_OR_RAISED, PILING, PIERS, CONCRETE, etc."
+                },
+                "foundationHeight": {
+                  "type": [
+                    "null",
+                    "number"
+                  ],
+                  "description": "first floor elevation height in feet"
+                },
+                "roofType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "roofing material: ASPHALT, METAL, TILE, WOOD, SLATE, CONCRETE, etc."
+                },
+                "stories": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "number of stories (default 1)"
+                },
+                "yearBuilt": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "year of construction"
+                },
+                "units": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "number of units in structure (default 1)"
+                },
+                "windDesignStandard": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "wind design standard: LOW, MEDIUM, or HIGH"
+                },
+                "defensibleSpace": {
+                  "type": [
+                    "null",
+                    "boolean"
+                  ],
+                  "description": "whether adequate wildfire defensible space exists around the property"
+                },
+                "fireProofing": {
+                  "type": [
+                    "null",
+                    "boolean"
+                  ],
+                  "description": "whether fire proofing measures exist (fire-proofed windows, flame resistant walls, etc.)"
+                },
+                "contentsCost": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "replacement cost of contents within the building in dollars"
+                },
+                "rebuildCostSf": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ],
+                  "description": "rebuild cost per square foot in dollars"
+                }
+              },
+              "description": "optional custom building details to override defaults for risk assessment",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "placeId"
+          ],
+          "additionalProperties": false
+        },
+        "name": "get_place_by_id"
+      },
+      {
+        "description": "Search and paginate localities with macroeconomic data. Filter by administrative level, country, state, county, or metro area. Sort by GDP, population, property price indices, and more.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "adminLevel": {
+              "type": "string",
+              "description": "administrative level: ADMIN_0 (country) or ADMIN_1 (state) or ADMIN_2 (county) or METRO"
+            },
+            "search": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "search by locality name"
+            },
+            "ssp": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "socio-economic pathway: SSP_1_26 or SSP_2_45 or SSP_5_85"
+            },
+            "first": {
+              "type": [
+                "null",
+                "integer"
+              ],
+              "description": "number of results to return (max 50)"
+            },
+            "after": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "cursor for pagination"
+            }
+          },
+          "required": [
+            "adminLevel"
+          ],
+          "additionalProperties": false
+        },
+        "name": "search_localities"
+      }
+    ]
+  }
+}

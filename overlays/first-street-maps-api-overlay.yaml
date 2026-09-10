@@ -1,0 +1,43 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the First Street Raster Map API
+  version: 1.0.0
+extends: openapi/first-street-maps-api-openapi.yml
+x-generated: '2026-09-10'
+x-method: generated
+x-source: https://docs.firststreet.org/api/raster-map-api/
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-09-10'
+      x-tile-scheme: xyz-web-mercator
+      x-tile-size: 256x256 PNG
+      x-ogc: false
+      x-ogc-note: >-
+        Not an OGC service. No WMS/WMTS/WFS endpoint and no GetCapabilities document exists;
+        the docs never mention OGC. The tile catalogue is prose at
+        https://docs.firststreet.org/api/raster-map-api/available-tiles.
+      x-agent-skills: skills/first-street-raster-map-tiles.md
+  - target: $.paths['/v2/maps/tile/{peril}/{product}/{z}/{x}/{y}.png'].get
+    update:
+      x-path-note: >-
+        The `product` segment is variable-length in the real API
+        (/v2/maps/tile/{peril}/{...product}/{z}/{x}/{y}.png) and differs per peril — e.g.
+        /globalflood/probability/depth/{relative-year}/{ssp}/{return-period}/. OpenAPI
+        cannot express a variable-length path segment, so the single {product} parameter
+        here is an approximation of the published template.
+      x-product-example: /globalflood/probability/depth/0/245/500/12/1171/1561.png
+      x-key-exposure-warning: >-
+        First Street requires that browser-facing tile requests be proxied server-side so
+        the API key is never sent to a client. Report leaked keys to security@firststreet.org.
+      x-recommended-opacity: '65%'
+      x-legend-source: 'GraphQL: <peril> { mapLegend { colors { color represents { min max } } } }'
+      x-rate-limit-note: >-
+        Tiles may carry a separate contractual limit from the GraphQL surface; the docs use
+        1000 requests/minute as an illustrative tile limit.
+      x-billing-note: Tile requests count toward overall API usage.
+  - target: $.components.securitySchemes.apiKeyQuery
+    update:
+      description: >-
+        Static API key as the `key` query parameter. This is the form the documented tile
+        URL templates use — which is exactly why the docs require a server-side proxy.

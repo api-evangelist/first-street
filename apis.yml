@@ -1,11 +1,15 @@
 aid: first-street
 name: First Street
 description: >-
-  First Street models use validated and proven methodologies to ensure model
-  accuracy. We measure and predict the impact of a peril based on the
-  underlying physics of how an actual event would transpire. First Street
-  exposes Climate Risk, Enterprise, and Raster Map APIs for property-level
-  climate risk data.
+  First Street is the physical climate risk data and analytics company behind the Risk
+  Factor property reports, acquired by MSCI on 2026-08-03. It models flood, wildfire,
+  wind, heat, cold, drought and air quality at property level anywhere on Earth using
+  peer-reviewed, physics-based methods rather than historical claims data, and exposes
+  that model through three APIs: a global Climate Risk GraphQL API, an Enterprise GraphQL
+  API for portfolio-level exposure, scenario analysis and adaptation cost-benefit, and a
+  Raster Map tile API for visualising perils on a map. It also runs a hosted MCP server so
+  agents can query property climate risk directly. Access to every surface, and to
+  individual fields within the GraphQL schemas, is granted by contract.
 type: Index
 deliveryModel:
   model: unknown
@@ -19,29 +23,43 @@ deliveryModel:
   generated: '2026-08-28'
   method: derived
 accessModel:
-  pricing: freemium
-  onboarding: self-serve
+  pricing: contract
+  onboarding: sales-gate
   trial: false
-  try_now: true
+  try_now: false
   public: false
-  label: Freemium · Self-serve signup
-  confidence: medium
+  label: Contract-only · Sales-gated onboarding
+  confidence: high
   source:
   - plans
   - authentication
-  - security
-  generated: '2026-09-03'
-  method: derived
+  - docs
+  generated: '2026-09-10'
+  method: searched
+  evidence: >-
+    Corrected 2026-09-10. The previous value (freemium / self-serve / try_now) was derived
+    from a 2026-05-04 scaffold that invented a Free tier First Street has never published.
+    firststreet.org/pricing is a lead-capture form with no tiers or prices; the docs state
+    "Access to these APIs differ by contractual agreement" and route every enquiry to an
+    account executive or bd@firststreet.org; rate limits and field-level entitlements are
+    both bound to the key at issuance. There is no self-serve path from signup to a
+    callable key, and the Playground requires a key you already hold.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/first-street.png
 access: 3rd-Party
 created: '2025-03-01'
-modified: '2026-04-28'
+modified: '2026-09-10'
 position: Consuming
 tags:
+  - Climate
+  - Risk
   - Environment
   - Modeling
-  - Risk
-  - Climate
+  - Geospatial
+  - Insurance
+  - Real Estate
+  - Data
+  - GraphQL
+  - Mapping
 url: >-
   https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml
 specificationVersion: '0.23'
@@ -53,12 +71,19 @@ apis:
   - Modeling
   - Risk
   - Climate
-  humanURL: https://docs.firststreet.org/api
+  - GraphQL
+  humanURL: https://docs.firststreet.org/api/climate-risk-api/getting-started
+  baseURL: https://api.firststreet.org
   properties:
   - url: https://firststreet.org/
     type: Website
-  - url: https://docs.firststreet.org/api
+  - url: https://docs.firststreet.org/api/climate-risk-api/getting-started
     type: Documentation
+  - url: graphql/first-street-climate-risk-api.graphql
+    type: GraphQL
+    name: First Street Climate Risk GraphQL SDL
+  - url: https://docs.firststreet.org/api/climate-risk-api/getting-started/playground
+    type: Playground
   description: >-
     The Climate Risk API provides physical climate risk data globally, delivering property-level insights
     into hazards including flood, wildfire, heat, wind, and air quality.
@@ -69,12 +94,17 @@ apis:
   - Modeling
   - Risk
   - Climate
-  humanURL: https://docs.firststreet.org/api
+  - GraphQL
+  humanURL: https://docs.firststreet.org/api/enterprise-api/getting-started
+  baseURL: https://api.firststreet.org
   properties:
   - url: https://firststreet.org/
     type: Website
-  - url: https://docs.firststreet.org/api
+  - url: https://docs.firststreet.org/api/enterprise-api/getting-started
     type: Documentation
+  - url: graphql/first-street-enterprise-api.graphql
+    type: GraphQL
+    name: First Street Enterprise GraphQL SDL
   description: >-
     The Enterprise API offers aggregated climate risk views for portfolios, enabling enterprise users
     to assess risk across multiple properties and geographic regions.
@@ -86,11 +116,12 @@ apis:
   - Risk
   - Climate
   - Mapping
-  humanURL: https://docs.firststreet.org/api
+  humanURL: https://docs.firststreet.org/api/raster-map-api/getting-started
+  baseURL: https://api.firststreet.org
   properties:
   - url: https://firststreet.org/
     type: Website
-  - url: https://docs.firststreet.org/api
+  - url: https://docs.firststreet.org/api/raster-map-api/getting-started
     type: Documentation
   description: >-
     The Raster Map API delivers visual raster layers of climate perils for mapping and visualization use
@@ -101,9 +132,14 @@ apis:
   humanURL: https://docs.firststreet.org/api
   tags:
   - Enterprise
+  baseURL: https://api.firststreet.org
   properties:
   - type: OpenAPI
     url: openapi/first-street-enterprise-api-openapi.yml
+  - type: Overlay
+    url: overlays/first-street-enterprise-api-overlay.yaml
+  - type: GraphQL
+    url: graphql/first-street-enterprise-api.graphql
 - aid: first-street:first-street-graphql-api
   name: First Street Graphql API
   description: The Graphql API from First Street — 1 operation(s) for graphql.
@@ -112,18 +148,50 @@ apis:
   - GraphQL
   tags_raw:
   - Graphql
+  baseURL: https://api.firststreet.org
   properties:
   - type: OpenAPI
     url: openapi/first-street-graphql-api-openapi.yml
+  - type: Overlay
+    url: overlays/first-street-graphql-api-overlay.yaml
+  - type: GraphQL
+    url: graphql/first-street-climate-risk-api.graphql
 - aid: first-street:first-street-maps-api
   name: First Street Maps API
   description: The Maps API from First Street — 1 operation(s) for maps.
   humanURL: https://docs.firststreet.org/api
   tags:
   - Maps
+  baseURL: https://api.firststreet.org
   properties:
   - type: OpenAPI
     url: openapi/first-street-maps-api-openapi.yml
+  - type: Overlay
+    url: overlays/first-street-maps-api-overlay.yaml
+- aid: first-street:mcp
+  name: First Street MCP Server
+  description: >-
+    Hosted, remote Model Context Protocol server exposing the Climate Risk API to agents
+    over Streamable HTTP. Ten tools with real JSON Schema inputs — property lookup by
+    address, coordinate or Place ID, building discovery inside a polygon, adaptation
+    cost-benefit, locality macroeconomics, metadata, and an arbitrary GraphQL escape
+    hatch. Authenticated with the same API key as the rest of the surface; tools/list is
+    answerable anonymously.
+  humanURL: https://docs.firststreet.org/api/mcp/getting-started
+  baseURL: https://mcp.firststreet.org/mcp
+  tags:
+  - MCP
+  - Agents
+  - Climate
+  - Risk
+  properties:
+  - type: MCPServer
+    url: mcp/first-street-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/first-street-tool-crosswalk.yml
+  - type: Documentation
+    url: https://docs.firststreet.org/api/mcp/getting-started
+
 common:
   - type: AgenticAccess
     url: agentic-access/first-street-agentic-access.yml
@@ -138,13 +206,72 @@ common:
   - type: GitHubOrganization
     url: https://github.com/FirstStreet
   - type: LinkedIn
-    url: https://www.linkedin.com/company/first-street-foundation
+    url: https://www.linkedin.com/company/first-street
   - type: Website
     url: https://firststreet.org/
   - type: Documentation
     url: https://docs.firststreet.org/api
-  - type: LlmsText
-    url: https://firststreet.org/llms.txt
+  - type: MCPServer
+    url: mcp/first-street-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/first-street-tool-crosswalk.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: LLMsTxt
+    url: llms/first-street-llms.txt
+  - type: Packages
+    url: packages/first-street-packages.yml
+  - type: SDKs
+    url: packages/first-street-packages.yml
+  - type: Conventions
+    url: conventions/first-street-conventions.yml
+  - type: ErrorCatalog
+    url: errors/first-street-error-codes.yml
+  - type: DataModel
+    url: data-model/first-street-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/first-street-lifecycle.yml
+  - type: StatusPage
+    url: https://status.firststreet.org/
+  - type: ChangeLog
+    url: changelog/first-street-changelog.yml
+  - type: Conformance
+    url: conformance/first-street-conformance.yml
+  - type: Compliance
+    url: https://security.firststreet.org/
+  - type: Security
+    url: https://docs.firststreet.org/api/security
+  - type: Sandbox
+    url: sandbox/first-street-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/first-street-rate-limits.yml
+  - type: Plans
+    url: plans/first-street-plans-pricing.yml
+  - type: FinOps
+    url: finops/first-street-finops.yml
+  - type: DeveloperPortal
+    url: https://docs.firststreet.org/api
+  - type: APIReference
+    url: https://docs.firststreet.org/api/available-api/graphql-apis
+  - type: GettingStarted
+    url: https://docs.firststreet.org/api/climate-risk-api/getting-started
+  - type: Support
+    url: mailto:api@firststreet.org
+  - type: Blog
+    url: https://firststreet.org/insights
+  - type: Pricing
+    url: https://firststreet.org/pricing
+  - type: Login
+    url: https://firststreet.org/login
+  - type: TermsOfService
+    url: https://www.msci.com/legal/terms-of-use
+  - type: PrivacyPolicy
+    url: https://firststreet.org/privacy-policy
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-09-10'
+  status: enriched
+  artifacts_added: 26
+  pass: local-v3

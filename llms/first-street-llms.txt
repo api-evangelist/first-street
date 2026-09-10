@@ -1,0 +1,67 @@
+# First Street API
+
+## First Street API
+
+- [First Street API](https://docs.firststreet.org/api/first-street-api.md): Comprehensive application programming interfaces for quantifying physical climate risk
+- [Security](https://docs.firststreet.org/api/security.md)
+- [Response Codes](https://docs.firststreet.org/api/response-codes.md)
+- [GraphQL APIs](https://docs.firststreet.org/api/available-api/graphql-apis.md)
+- [Connections](https://docs.firststreet.org/api/available-api/graphql-apis/connections.md)
+- [Error Handling](https://docs.firststreet.org/api/available-api/graphql-apis/error-handling.md)
+- [Map APIs](https://docs.firststreet.org/api/available-api/map-apis.md)
+- [Getting Started](https://docs.firststreet.org/api/climate-risk-api/getting-started.md)
+- [Authorization](https://docs.firststreet.org/api/climate-risk-api/getting-started/authorization.md)
+- [Rate Limits](https://docs.firststreet.org/api/climate-risk-api/getting-started/rate-limits.md)
+- [Playground](https://docs.firststreet.org/api/climate-risk-api/getting-started/playground.md)
+- [Migrating from US Domestic API](https://docs.firststreet.org/api/climate-risk-api/migrating-from-us-domestic-api.md)
+- [Asynchronous Data Retrevial](https://docs.firststreet.org/api/climate-risk-api/asynchronous-data-retrevial.md)
+- [Fetching a Place](https://docs.firststreet.org/api/climate-risk-api/fetching-a-place.md)
+- [Building Input](https://docs.firststreet.org/api/climate-risk-api/building-input.md)
+- [Retrieving Data](https://docs.firststreet.org/api/climate-risk-api/retrieving-data.md)
+- [Flood Probability & Damages](https://docs.firststreet.org/api/climate-risk-api/retrieving-data/flood-probability-and-damages.md)
+- [Wildfire Probability & Damages](https://docs.firststreet.org/api/climate-risk-api/retrieving-data/wildfire-probability-and-damages.md)
+- [Wind Probability & Damages](https://docs.firststreet.org/api/climate-risk-api/retrieving-data/wind-probability-and-damages.md)
+- [Data Vintage](https://docs.firststreet.org/api/climate-risk-api/data-vintage.md)
+- [Getting Started](https://docs.firststreet.org/api/enterprise-api/getting-started.md)
+- [Workflow](https://docs.firststreet.org/api/enterprise-api/workflow.md)
+- [Upload Assets](https://docs.firststreet.org/api/enterprise-api/workflow/upload-assets.md)
+- [Staged Assets](https://docs.firststreet.org/api/enterprise-api/workflow/staged-assets.md)
+- [Projects](https://docs.firststreet.org/api/enterprise-api/projects.md)
+- [Project Modules](https://docs.firststreet.org/api/enterprise-api/projects/project-modules.md)
+- [Refreshing Modules](https://docs.firststreet.org/api/enterprise-api/projects/project-modules/refreshing-modules.md)
+- [Overview Module](https://docs.firststreet.org/api/enterprise-api/projects/project-modules/overview-module.md)
+- [Climate Exposure Module](https://docs.firststreet.org/api/enterprise-api/projects/project-modules/climate-exposure-module.md)
+- [Scenario Analysis Module](https://docs.firststreet.org/api/enterprise-api/projects/project-modules/scenario-analysis-module.md)
+- [Company Overview Module](https://docs.firststreet.org/api/enterprise-api/projects/project-modules/company-overview-module.md)
+- [Project Assets](https://docs.firststreet.org/api/enterprise-api/projects/project-assets.md)
+- [Equities Project](https://docs.firststreet.org/api/enterprise-api/projects/equities-project.md)
+- [Getting Started](https://docs.firststreet.org/api/raster-map-api/getting-started.md)
+- [Examples](https://docs.firststreet.org/api/raster-map-api/getting-started/examples.md)
+- [Available Tiles](https://docs.firststreet.org/api/raster-map-api/available-tiles.md)
+- [Integration](https://docs.firststreet.org/api/raster-map-api/integration.md)
+- [Example with ArcGIS Online](https://docs.firststreet.org/api/raster-map-api/integration/example-with-arcgis-online.md)
+- [Getting Started](https://docs.firststreet.org/api/mcp/getting-started.md)
+
+## Enterprise Suite
+
+- [First Street Enterprise Suite](https://docs.firststreet.org/api/enterprise-platform/readme.md)
+- [Setup Guide](https://docs.firststreet.org/api/enterprise-platform/saml-sso/quickstart.md)
+- [Provider Guides](https://docs.firststreet.org/api/enterprise-platform/saml-sso/provider-guides.md)
+- [Otka SAML SSO](https://docs.firststreet.org/api/enterprise-platform/saml-sso/provider-guides/otka-saml-sso.md)
+- [Microsoft Azure (Entra ID)](https://docs.firststreet.org/api/enterprise-platform/saml-sso/provider-guides/microsoft-azure-entra-id.md)
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://docs.firststreet.org/api/first-street-api.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

@@ -1,0 +1,155 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  https://docs.firststreet.org/api/ (security, response-codes, graphql-apis, connections,
+  error-handling, rate-limits, enterprise-platform/saml-sso), the first-party GraphQL SDLs
+  at github.com/FirstStreet/api, and a live fetch of
+  https://auth.firststreet.org/sso/saml/metadata
+description: >-
+  Which cross-cutting and domain standards the First Street surface actually conforms to,
+  each with evidence in the contract or the docs rather than a marketing claim.
+
+standards:
+  - id: graphql
+    conforms: true
+    evidence: >-
+      Two production GraphQL endpoints (v3 Climate Risk, Enterprise). First-party SDL for
+      both published at github.com/FirstStreet/api. The Enterprise endpoint answers a full
+      introspection query anonymously (HTTP 200, 350 types).
+    artifacts:
+      - graphql/first-street-climate-risk-api.graphql
+      - graphql/first-street-enterprise-api.graphql
+      - graphql/first-street-us-domestic-api.graphql
+
+  - id: graphql-cursor-connections
+    conforms: true
+    evidence: >-
+      https://docs.firststreet.org/api/available-api/graphql-apis/connections documents the
+      Relay Connection model verbatim — first/after arguments, edges { node, cursor },
+      pageInfo { hasNextPage, endCursor } — and the SDLs carry *Connection types
+      (e.g. localitiesByMacroeconomicConnection, projectsConnection).
+
+  - id: mcp
+    conforms: true
+    evidence: >-
+      Hosted Streamable-HTTP MCP server at https://mcp.firststreet.org/mcp. tools/list
+      answered anonymously with 10 tools carrying real JSON Schema inputSchema.
+    artifacts: [mcp/first-street-mcp.yml, mcp/first-street-mcp-tools.json]
+
+  - id: saml-2.0
+    conforms: true
+    evidence: >-
+      SAML 2.0 Service Provider metadata served live at
+      https://auth.firststreet.org/sso/saml/metadata (HTTP 200,
+      application/samlmetadata+xml). EntityDescriptor / SPSSODescriptor with
+      protocolSupportEnumeration urn:oasis:names:tc:SAML:2.0:protocol,
+      WantAssertionsSigned="true", and an ACS at
+      https://auth.firststreet.org/sso/saml/acs. Documented at
+      https://docs.firststreet.org/api/enterprise-platform/saml-sso/quickstart with Okta
+      and Microsoft Entra ID provider guides.
+    artifacts: [conformance/first-street-saml-sp-metadata.xml]
+    domain_standard: true
+    note: >-
+      This is the domain-standard signature for the Enterprise Suite's identity surface —
+      an enterprise buyer who already speaks SAML federates with no bespoke connector.
+
+  - id: scim
+    conforms: false
+    evidence: >-
+      Explicitly disclaimed by the provider:
+      "SCIM is a standard for automating user identity provisioning. First Street
+      currently does not support SCIM." — docs enterprise-platform/saml-sso/quickstart.
+      User reconciliation is instead a GraphQL query (rbacGroupUsersConnection).
+
+  - id: oauth2
+    conforms: false
+    evidence: >-
+      No OAuth flow anywhere. Authentication is a static API key sent as the `key` query
+      parameter or Authorization: Bearer <key>. No /.well-known/oauth-authorization-server
+      on any of the nine probed hosts.
+
+  - id: oidc
+    conforms: false
+    evidence: No /.well-known/openid-configuration on any probed host; enterprise SSO is SAML, not OIDC.
+
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      REST errors are a bespoke envelope — {"error":{"code":"401","message":"Invalid API
+      Key"}} observed live on api.firststreet.org. No application/problem+json anywhere in
+      the docs or the specs.
+
+  - id: rfc6749-bearer-token
+    conforms: partial
+    evidence: >-
+      The Authorization: Bearer <key> header shape is used, but the credential is a
+      long-lived API key rather than an OAuth 2.0 access token. Docs:
+      https://docs.firststreet.org/api/climate-risk-api/getting-started/authorization
+
+  - id: rate-limit-headers
+    conforms: partial
+    evidence: >-
+      Publishes x-ratelimit-limit / x-ratelimit-remaining / x-ratelimit-reset
+      (https://docs.firststreet.org/api/climate-risk-api/getting-started/rate-limits).
+      These are the de-facto X-RateLimit-* family, not the IETF draft RateLimit /
+      RateLimit-Policy fields, and no Retry-After is documented.
+
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: >-
+      No /.well-known/security.txt on any of the nine probed hosts, despite a full
+      published disclosure policy at https://docs.firststreet.org/api/security.
+    artifacts: [well-known/first-street-well-known.yml]
+
+  - id: a2a-agent-card
+    conforms: false
+    evidence: >-
+      Neither /.well-known/agent-card.json nor /.well-known/agent.json is served on any
+      probed host, including mcp.firststreet.org.
+
+  - id: llmstxt
+    conforms: true
+    evidence: >-
+      https://docs.firststreet.org/api/llms.txt (HTTP 200, text/markdown, 5,417 bytes) and
+      a companion llms-full.txt (127,062 bytes), published by GitBook. Note the apex
+      https://firststreet.org/llms.txt is a soft-404.
+    artifacts: [llms/first-street-llms.txt]
+
+  - id: ogc-api
+    conforms: false
+    evidence: >-
+      Probed only where evidence pointed, per policy. The docs never mention OGC, WMS,
+      WFS, WMTS, CSW or GetCapabilities. The Raster Map API is a plain XYZ/Web-Mercator
+      slippy-tile scheme
+      (/v2/maps/tile/{peril}/{...product}/{z}/{x}/{y}.png), documented for Mapbox, Google
+      Maps, ArcGIS Online "Add layer from URL" and MapKit — a de-facto convention, not an
+      OGC service. No OGC endpoint was fabricated or blind-probed.
+
+  - id: openapi
+    conforms: partial
+    evidence: >-
+      First Street publishes no OpenAPI. The three specs in openapi/ are API Evangelist
+      transport-level descriptions of the two GraphQL endpoints and the tile endpoint; the
+      provider's own machine-readable contracts are the GraphQL SDLs.
+
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      No event surface. Asynchronous modeling results are retrieved by POLLING a status
+      enum (FSModelResponseStatus: PENDING/RUNNING/SUCCESS/FAILED/TIMEOUT/ERROR) —
+      https://docs.firststreet.org/api/climate-risk-api/asynchronous-data-retrevial. No
+      webhooks, no streaming, no subscriptions ("APIs provided by First Street do not
+      support subscriptions").
+
+compliance:
+  certifications:
+    - {name: SOC 2 Type II, evidence: 'https://firststreet.org/security — page title "Security at First Street - SOC2 Type II Compliant"; body references a SOC 2 Type II audit'}
+  trust_center: https://security.firststreet.org/
+  trust_center_platform: Vanta
+  note: >-
+    Reports, policies and subprocessor detail sit behind the Vanta trust center, which
+    renders client-side and gates document downloads behind a request form.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

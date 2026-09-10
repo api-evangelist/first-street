@@ -1,0 +1,149 @@
+generated: '2026-09-10'
+method: derived
+source: >-
+  graphql/first-street-climate-risk-api.graphql and
+  graphql/first-street-enterprise-api.graphql (first-party SDLs published at
+  github.com/FirstStreet/api), cross-checked against
+  graphql/first-street-enterprise-introspection.json
+description: >-
+  The entity graph behind First Street's two GraphQL APIs. Two roots, and they do not
+  join: Climate Risk hangs everything off a Place (one location, six perils, on-demand
+  modelling) while Enterprise hangs everything off a Project (a portfolio of Assets with
+  aggregate modules). The Enterprise side is where every write lives.
+
+roots:
+  - {entity: Place, api: Climate Risk, id: placeId, id_type: String}
+  - {entity: Locality, api: Climate Risk, id: localityId, id_type: Int64}
+  - {entity: Project, api: Enterprise, id: projectId, id_type: Int64}
+
+identifiers:
+  - {name: placeId, type: String, example: dqbutwn70, note: 'Opaque First Street Place ID; the join key for every Climate Risk query and for adding assets to a Project.'}
+  - {name: localityId, type: Int64, note: 'Administrative area at ADMIN_0 (country) / ADMIN_1 (state) / ADMIN_2 (county) / METRO.'}
+  - {name: fsid, type: Int, note: 'Legacy v2 US-domestic property identifier, still returned in docs examples (e.g. 362104205).'}
+  - {name: projectId, type: Int64, api: Enterprise}
+  - {name: projectJobId, type: Int64, api: Enterprise, note: 'Upload / export / refresh jobs are all addressed by a job id.'}
+  - {name: userGroupId, type: Int, api: Enterprise, note: 'Organisation scope; used by rbacGroupUsersConnection for user reconciliation.'}
+
+entities:
+  climate_risk:
+    - name: Place
+      description: A modelled location on Earth — the unit of analysis for the Climate Risk API.
+      key: placeId
+      implements: PlaceResponse
+      relationships:
+        - {kind: has_one, target: Vintage, via: vintage, note: The model release this response was computed under.}
+        - {kind: has_one, target: PlaceGeometry, via: geometry}
+        - {kind: has_one, target: PlaceFlood, via: flood}
+        - {kind: has_one, target: PlaceWildfire, via: wildfire}
+        - {kind: has_one, target: PlaceWind, via: wind}
+        - {kind: has_one, target: PlaceHeat, via: heat}
+        - {kind: has_one, target: PlaceCold, via: cold}
+        - {kind: has_one, target: PlaceDrought, via: drought}
+        - {kind: has_one, target: PlacePrimaryPeril, via: primaryPeril}
+        - {kind: has_one, target: PlaceAllPeril, via: allPeril}
+        - {kind: has_one, target: PlaceBuilding, via: placeBuilding}
+        - {kind: has_one, target: PlaceAdaptations, via: adaptations}
+        - {kind: has_one, target: PlaceLocality, via: locality}
+        - {kind: has_one, target: Building, via: building, deprecated: true, replacement: placeBuilding}
+    - name: 'Place<Peril>'
+      description: >-
+        One node per hazard, all the same shape — status + data. Concrete types are
+        PlaceFlood, PlaceWildfire, PlaceWind, PlaceHeat, PlaceCold, PlaceDrought.
+      relationships:
+        - {kind: has_one, target: FSModelResponseStatus, via: status, note: 'PENDING|RUNNING|SUCCESS|FAILED|TIMEOUT|ERROR — read this before data.'}
+        - {kind: has_one, target: 'Place<Peril>Data', via: data}
+        - {kind: has_one, target: 'Place<Peril>Probability', via: probability}
+        - {kind: has_one, target: 'Place<Peril>Damages', via: damages, note: 'Flood, Wildfire and Wind only.'}
+      entitlement_note: >-
+        Access is granted per peril node by contract; an unentitled peril returns null with
+        an "Error 15" entry rather than failing the request.
+    - name: Building
+      description: >-
+        Building characteristics that drive the damage model. Can be supplied as
+        BuildingInput to override First Street's defaults — the input side of the model.
+      fields_of_note: [assetTypeId, buildingSf, stories, yearBuilt, foundationType, foundationHeight, basement, constructionType, roofType, fireProofing, defensibleSpace, windDesignStandard, rebuildCostPerSf, contentsCost, inventoryCost, assetValuation]
+      deprecated_fields: [rebuildCost, missileEnvironment]
+    - name: Locality
+      key: localityId
+      relationships:
+        - {kind: has_one, target: BoundingBox, via: boundingBox}
+        - {kind: has_many, target: LocalityMacroeconomicData, via: macroeconomic}
+        - {kind: has_one, target: LocalityInsuranceData, via: insurance}
+        - {kind: has_many, target: ParentLocality, via: parentLocalities, note: Administrative rollup chain.}
+    - name: Adaptation
+      description: A mitigation measure with cost and payback, returned per Place.
+      relationships:
+        - {kind: has_many, target: AdaptationPeril, via: peril}
+        - {kind: has_many, target: AdaptationAAL, via: aal, note: Average annual loss with the measure applied.}
+        - {kind: has_many, target: PaybackYears, via: paybackYears}
+      fields_of_note: [type, name, annualCost, setupCost]
+    - name: Geospatial
+      description: Building discovery within a GeoJSON polygon (max 9 km2).
+      relationships:
+        - {kind: has_many, target: FoundBuilding, via: FindBuildingsResponse}
+
+  enterprise:
+    - name: Project
+      description: A portfolio — a collection of assets plus the climate analyses run over them.
+      key: projectId
+      status_enum: [ACTIVE, ARCHIVED, LOCKED]
+      relationships:
+        - {kind: has_many, target: ProjectAsset, via: projectAsset}
+        - {kind: has_many, target: ProjectModule, via: 'refreshProjectModule / project modules'}
+        - {kind: has_many, target: ProjectJob, via: projectJobs}
+        - {kind: has_many, target: LinkShare, via: linkSharesConnection}
+        - {kind: belongs_to, target: UserGroup, via: userGroup}
+        - {kind: has_one, target: Portfolio, via: portfolio}
+      deprecated_fields: [vintage]
+    - name: ProjectJob
+      description: The asynchronous unit — upload, import, export, refresh and async delete all resolve to a job.
+      relationships:
+        - {kind: has_one, target: JobStatus, via: status}
+        - {kind: belongs_to, target: Project, via: projectId}
+      lifecycle: 'upload -> STAGED assets -> commit to Project -> module data'
+    - name: ProjectAsset
+      description: One location in a portfolio, joined to the Climate Risk model by Place ID.
+      relationships:
+        - {kind: belongs_to, target: Project, via: projectId}
+        - {kind: has_one, target: Place, via: placeId, cross_api: true, note: 'The one join between the two APIs — addProjectAssetByPlaceID / deleteProjectAssetByPlaceID.'}
+    - name: ProjectModule
+      description: An aggregated analysis over a Project.
+      variants: [Overview, Climate Exposure, Scenario Analysis, Company Overview]
+      relationships:
+        - {kind: belongs_to, target: Project, via: projectId}
+        - {kind: has_one, target: AIInsights, via: aiInsights, note: 'AIInsightsStatus: GENERATING|GENERATED|FAILED|DIRTY'}
+    - name: Company
+      description: Equities-project entity carrying industry/sector classification and value-chain revenue.
+      relationships:
+        - {kind: has_one, target: Industry, via: industry}
+        - {kind: has_one, target: Sector, via: sector}
+        - {kind: has_many, target: ValueChainRevenue, via: valueChainRevenue}
+      deprecated_fields: [industryId, sectorId]
+    - name: Portfolio
+      description: Hierarchical grouping above/below Projects; assets move and copy between parents.
+      relationships:
+        - {kind: has_many, target: Portfolio, via: 'movePortfolio / copyPortfolioToNewParent', note: Self-referential tree.}
+
+cross_api_join:
+  key: placeId
+  description: >-
+    Place ID is the only identifier shared by both APIs. A portfolio asset is bound to the
+    global climate model through it (addProjectAssetByPlaceID), and it is also the key the
+    MCP get_place_by_id and get_adaptations tools take.
+
+enums_of_note:
+  - {name: SSP, values: [SSP_1_26, SSP_2_45, SSP_5_85], note: Shared Socioeconomic Pathway — the scenario axis on almost every projection.}
+  - {name: FSModelResponseStatus, values: [PENDING, RUNNING, SUCCESS, FAILED, TIMEOUT, ERROR]}
+  - {name: AdministrativeLevel, values: [ADMIN_0, ADMIN_1, ADMIN_2, METRO]}
+  - {name: ProjectStatus, values: [ACTIVE, ARCHIVED, LOCKED]}
+  - {name: AIInsightsStatus, values: [GENERATING, GENERATED, FAILED, DIRTY]}
+  - {name: AdaptationGroup, note: 'Flood barriers, dry/wet floodproofing, raised foundation, retaining walls, drainage, equipment elevation, wind design standard upgrades.'}
+
+counts:
+  climate_risk: {object_types: 90, input_types: 26, enums: 27, query_fields: 11, mutation_fields: 0, deprecated_members: 15}
+  enterprise: {object_types: 182, input_types: 63, enums: 54, query_fields: 25, mutation_fields: 42, deprecated_members: 42}
+  us_domestic: {object_types: 276, input_types: 48, enums: 25, deprecated_members: 37, status: maintenance}
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

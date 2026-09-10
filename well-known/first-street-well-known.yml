@@ -1,0 +1,625 @@
+generated: '2026-09-10'
+method: probed
+source: live probes of every host this record knows
+description: >-
+  Recorded absence. Nine First Street hosts were probed against the full named
+  /.well-known path list plus the two APIs.json root paths. NOTHING was served: the two
+  www hosts, the docs host, the trust-center host and the status host are all catch-alls
+  that answer 200 with an HTML shell for any path (including a negative control that
+  cannot exist), api.firststreet.org 401s every unauthenticated path, and
+  mcp/auth/app.firststreet.org return honest 404s. No document was fetched, so no
+  WellKnown, SecurityTxt or AgentCard pointer is emitted — this file documents a real
+  zero, not a surface.
+hit_count: 0
+path_echo_control: passed
+soft_404_control:
+  note: >-
+    A negative control path that cannot exist was requested on every host. Where it
+    returned 2xx the host is a catch-all and every 2xx on that host is discarded.
+hosts:
+  - host: https://firststreet.org
+    catch_all: true
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 200
+      verdict: 2xx on a path that cannot exist — every 2xx on this host discarded
+    note: >-
+      soft-404 catch-all: Next.js app answers 200 with a ~81.8KB 'Page Not Found' HTML body for every unknown path
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/api-catalog
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.yml
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ucp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/acp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/aauth-resource.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent-card.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+  - host: https://www.firststreet.org
+    catch_all: true
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 200
+      verdict: 2xx on a path that cannot exist — every 2xx on this host discarded
+    note: >-
+      same Next.js catch-all as the apex
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/api-catalog
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.yml
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ucp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/acp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/aauth-resource.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent-card.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+  - host: https://api.firststreet.org
+    catch_all: false
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 401
+      verdict: honest miss
+    note: >-
+      API host rejects every unauthenticated path with {"error":{"code":"401","message":"Invalid API Key"}}
+    documents:
+      - path: /.well-known/security.txt
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/openid-configuration
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/oauth-protected-resource
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/api-catalog
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/ai-plugin.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/apis.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /apis.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /apis.yml
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/ucp.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/acp.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/aauth-resource.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/agent-card.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+      - path: /.well-known/agent.json
+        status: 401
+        file: null
+        verdict: gated (401 Invalid API Key)
+  - host: https://docs.firststreet.org
+    catch_all: true
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 200
+      verdict: 2xx on a path that cannot exist — every 2xx on this host discarded
+    note: >-
+      GitBook loader shell (11,164 bytes) returned for every root-level path
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/api-catalog
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.yml
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ucp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/acp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/aauth-resource.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent-card.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+  - host: https://mcp.firststreet.org
+    catch_all: false
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 404
+      verdict: honest miss
+    note: >-
+      honest 404s (text/plain, 19 bytes)
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/apis.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /apis.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /apis.yml
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/ucp.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/acp.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/aauth-resource.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+        verdict: absent
+  - host: https://auth.firststreet.org
+    catch_all: false
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 404
+      verdict: honest miss
+    note: >-
+      honest 404s (text/plain, 19 bytes)
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/apis.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /apis.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /apis.yml
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/ucp.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/acp.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/aauth-resource.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+        verdict: absent
+  - host: https://app.firststreet.org
+    catch_all: false
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 404
+      verdict: honest miss
+    note: >-
+      honest 404 HTML
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/apis.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /apis.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /apis.yml
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/ucp.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/acp.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/aauth-resource.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+        verdict: absent
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+        verdict: absent
+  - host: https://security.firststreet.org
+    catch_all: true
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 200
+      verdict: 2xx on a path that cannot exist — every 2xx on this host discarded
+    note: >-
+      Vanta trust-center SPA shell (5,442 bytes) returned for every path
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/api-catalog
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.yml
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ucp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/acp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/aauth-resource.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent-card.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+  - host: https://status.firststreet.org
+    catch_all: true
+    soft_404_control:
+      path: /.well-known/first-street-negative-control-7f3ab91c.json
+      status: 200
+      verdict: 2xx on a path that cannot exist — every 2xx on this host discarded
+    note: >-
+      Better Stack status-page SPA shell (464,146 bytes) returned for every path
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/api-catalog
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /apis.yml
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/ucp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/acp.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/aauth-resource.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent-card.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+      - path: /.well-known/agent.json
+        status: 200
+        file: null
+        verdict: soft-404 (HTML shell, not a document)
+
+findings:
+  - >-
+    No security.txt anywhere, despite First Street publishing a full vulnerability
+    disclosure policy with a safe harbour clause at
+    https://docs.firststreet.org/api/security and a security@firststreet.org contact. A
+    single RFC 9116 file on firststreet.org would make that policy machine-discoverable.
+  - >-
+    No A2A agent card at either /.well-known/agent-card.json or the legacy
+    /.well-known/agent.json on any of the nine hosts — including mcp.firststreet.org,
+    which does run a real MCP server.
+  - >-
+    No apis.json / apis.yml index at either the root or the well-known path.
+  - >-
+    No OAuth or OIDC discovery document; the API is API-key only and enterprise SSO is
+    SAML 2.0, whose metadata is served at a non-well-known path
+    (https://auth.firststreet.org/sso/saml/metadata) and is captured in conformance/.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

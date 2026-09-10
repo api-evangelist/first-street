@@ -1,0 +1,49 @@
+generated: '2026-09-10'
+method: generated
+source: >-
+  Grounded in real, verified surface: GraphQL field names from the first-party SDLs in
+  graphql/, MCP tool names from a live tools/list on https://mcp.firststreet.org/mcp, and
+  OpenAPI operationIds from openapi/. No operation name in these skills was invented.
+description: >-
+  Packaged agent operating instructions for the four flows First Street actually supports.
+  Each one carries the conventions an agent gets wrong on this API by default: poll on
+  status before reading data, pin the vintage if the answer must be reproducible, quote
+  the SSP scenario with every payback, proxy the tile key, and remember that the Enterprise
+  write surface has no idempotency key and no undo for deletes.
+skills:
+  - file: first-street-property-climate-risk.md
+    name: Look up property-level climate risk
+    api: graphql/first-street-climate-risk-api.graphql
+    endpoint: https://api.firststreet.org/v3/graphql
+    operations: [placeByAddress, placeByCoordinate, place, geospatial]
+    mcp_tools: [get_place_by_address, get_place_by_coordinate, get_place_by_id, find_buildings]
+  - file: first-street-adaptation-cost-benefit.md
+    name: Price climate adaptations for a property
+    api: graphql/first-street-climate-risk-api.graphql
+    endpoint: https://api.firststreet.org/v3/graphql
+    operations: [adaptations, place]
+    mcp_tools: [get_adaptations, get_place_by_id]
+  - file: first-street-portfolio-project.md
+    name: Run a portfolio through the Enterprise API
+    api: graphql/first-street-enterprise-api.graphql
+    endpoint: https://api.firststreet.org/enterprise/graphql
+    operations: [createProjectJobUploadLink, setUploadJobPendingImport, projectJob, createProject, importProjectAssets, addProjectAssetByPlaceID, refreshProjectModule, createProjectExport, generateProjectExportDownloadLink, cancelProjectExport, setProjectStatus, deleteProjectAsync]
+    mcp_tools: []
+    mcp_note: The Enterprise API has no MCP surface; expansion is stated as planned.
+  - file: first-street-raster-map-tiles.md
+    name: Serve First Street climate raster tiles
+    api: openapi/first-street-maps-api-openapi.yml
+    endpoint: https://api.firststreet.org/v2/maps/tile
+    operations: [getRasterTile]
+    mcp_tools: []
+provider_published_skills:
+  searched: true
+  found: false
+  note: >-
+    No AGENTS.md, /skills surface or provider-authored agent instructions were found on
+    firststreet.org, docs.firststreet.org or in the FirstStreet GitHub organization. The
+    closest thing First Street publishes is the GitBook agent-instructions footer on every
+    .md docs page, which describes GitBook's ?ask= query mechanism rather than the API.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

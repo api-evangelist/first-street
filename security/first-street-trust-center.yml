@@ -1,12 +1,35 @@
-generated: '2026-07-11'
+generated: '2026-09-10'
 method: searched
 probe: true
-source: https://firststreet.org/security
-url: https://firststreet.org/security
+source: https://security.firststreet.org/
+url: https://security.firststreet.org/
+platform: Vanta
+description: >-
+  First Street runs a Vanta-hosted trust center at security.firststreet.org (page title
+  "First Street Trust Center"), linked from its own API repository README as the canonical
+  place to read its security posture. The marketing security page at
+  firststreet.org/security carries the SOC 2 Type II claim in its own title.
 certifications:
-- SOC 2
+  - {name: SOC 2 Type II, evidence: 'https://firststreet.org/security — page title "Security at First Street - SOC2 Type II Compliant"; body references a SOC 2 Type II audit and penetration testing'}
+readable_by_machine: false
+readable_note: >-
+  The trust center is a client-rendered Vanta SPA — 5,442 bytes of shell HTML, with the
+  certification list, policies and subprocessors loaded by script and document downloads
+  behind a request form. Nothing on it is machine-readable, and it answers 200 with the
+  same shell for every path (including a negative control), so it must not be treated as a
+  well-known surface.
+data_handling:
+  uploaded_assets: >-
+    Enterprise portfolio uploads are encrypted at rest and the uploaded file is
+    "automatically deleted after 7 days".
+  access_scope: >-
+    Assets uploaded to projects are accessible by users within your Organization and your
+    Account Executive.
+  source: https://docs.firststreet.org/api/enterprise-api/workflow/upload-assets
 evidence:
-- source: https://firststreet.org/security
-  keywords:
-  - soc 2
-  - soc2
+  - {source: 'https://security.firststreet.org/', http_status: 200, keywords: [trust, security, compliance, 'First Street Trust Center']}
+  - {source: 'https://firststreet.org/security', http_status: 200, keywords: ['soc 2', 'soc2 type ii', 'penetration test']}
+  - {source: 'https://github.com/FirstStreet/api/blob/HEAD/README.md', quote: 'For more information of our security policies, please visit our trust center'}
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

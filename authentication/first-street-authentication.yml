@@ -1,21 +1,110 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/first-street-openapi.yml
+generated: '2026-09-10'
+method: searched
+source: https://docs.firststreet.org/api/climate-risk-api/getting-started/authorization
+docs: https://docs.firststreet.org/api/climate-risk-api/getting-started/authorization
+also_source:
+  - https://docs.firststreet.org/api/mcp/getting-started
+  - https://docs.firststreet.org/api/enterprise-platform/saml-sso/quickstart
+  - openapi/_original/first-street-openapi.yml
+description: >-
+  One static API key authenticates every First Street machine surface — REST tiles,
+  both GraphQL endpoints, and the MCP server. There is no OAuth, no OIDC, no token
+  exchange and no scope vocabulary. What replaces scopes is a contractual, per-schema-node
+  entitlement model applied server-side, which is why a valid key can still be refused an
+  individual field.
+
 summary:
-  types:
-  - apiKey
-  - http
-  api_key_in:
-  - query
+  types: [apiKey, http]
+  api_key_in: [query, header]
+  oauth2_flows: []
+  scoped: false
+  human_sso: [saml2]
+
 schemes:
-- name: apiKeyQuery
-  type: apiKey
-  in: query
-  parameter: key
-  sources:
-  - openapi/first-street-openapi.yml
-- name: bearerAuth
-  type: http
+  - name: apiKeyQuery
+    type: apiKey
+    in: query
+    parameter: key
+    example: 'curl "https://api.firststreet.org/v1/apikey?key={api-key}"'
+    sources: [openapi/_original/first-street-openapi.yml, docs]
+    applies_to: [Climate Risk API, Enterprise API, Raster Map API]
+    caution: >-
+      Query-parameter keys land in access logs, browser history and Referer headers. The
+      docs' own tile-integration guidance requires proxying tile calls server-side so the
+      key is not exposed to a client.
+  - name: bearerAuth
+    type: http
+    scheme: bearer
+    header: Authorization
+    format: 'Bearer <api-key>'
+    example: 'curl "https://api.firststreet.org/v1/apikey" -H "Authorization: Bearer {api-key}"'
+    sources: [openapi/_original/first-street-openapi.yml, docs]
+    applies_to: [Climate Risk API, Enterprise API, Raster Map API, MCP server]
+    note: >-
+      The Bearer shape is borrowed; the credential is a long-lived API key, not an OAuth
+      access token. This is the only accepted form on the MCP server.
+
+mcp:
+  endpoint: https://mcp.firststreet.org/mcp
   scheme: bearer
-  sources:
-  - openapi/first-street-openapi.yml
+  config_header: '"Authorization": "Bearer <your-token>"'
+  entitlement: >-
+    "All API users with access to the Climate Risk API is able utilize First Street's MCP
+    Service" — no separate MCP credential or consent step.
+  anonymous_surface: >-
+    tools/list answers WITHOUT a key (HTTP 200). Discovery is open; invocation is not.
+
+entitlement_model:
+  granularity: schema node
+  enforced_by: server-side policy directives in the GraphQL schema (@fsHasPolicy, @fsApplyExclusion)
+  evidence: >-
+    The published SDL declares directives `@fsHasPolicy(service: Service!)` and
+    `@fsApplyExclusion` on field definitions — the entitlement machinery is visible in the
+    contract even though the grant matrix is not.
+  failure_mode: >-
+    An unentitled field returns HTTP 200 with that branch null and an "Error 15: Your
+    account has no access to this node" entry in errors[]. See errors/.
+  remediation_contact: api@firststreet.org
+
+key_management:
+  self_serve: false
+  rotation_policy_published: false
+  guidance:
+    - Do not embed API keys directly in code.
+    - Do not store API keys in files inside your application's source tree.
+    - Set up application and API key restrictions.
+    - Delete unneeded API keys to minimize exposure to attacks.
+    - Regenerate your API keys periodically.
+    - Review your code before publicly releasing it.
+  leak_response: 'Contact your account executive or security@firststreet.org immediately.'
+  note: >-
+    Rate limits and service-specific limits are "applied during key retrevial" — the key
+    carries the contract, so keys are not interchangeable between entitlements.
+
+human_authentication:
+  surface: First Street Enterprise Suite (https://app.firststreet.org/)
+  method: SAML 2.0 Single Sign-On
+  entity_id: https://auth.firststreet.org/sso/saml/metadata
+  acs_url: https://auth.firststreet.org/sso/saml/acs
+  metadata: conformance/first-street-saml-sp-metadata.xml
+  attributes: [email, firstName, lastName]
+  attribute_note: Mappings must not be namespaced or prefixed.
+  idp_guides: [Okta, 'Microsoft Entra ID (Azure AD)']
+  setup: account-executive mediated (not self-serve)
+  password_login_after_sso: disabled
+  scim: false
+  scim_note: >-
+    "First Street currently does not support SCIM." User reconciliation is a GraphQL
+    query — rbacGroupUsersConnection(filter: { userGroupId: XX }).
+  docs: https://docs.firststreet.org/api/enterprise-platform/saml-sso/quickstart
+
+not_supported:
+  - OAuth 2.0 (no authorization server, no /.well-known/oauth-authorization-server)
+  - OpenID Connect (no /.well-known/openid-configuration)
+  - mTLS
+  - Scoped or short-lived API tokens
+  - JWT access tokens
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

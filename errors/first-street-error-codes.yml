@@ -1,0 +1,91 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.firststreet.org/api/response-codes
+also_source:
+  - https://docs.firststreet.org/api/available-api/graphql-apis/error-handling
+  - live observation of https://api.firststreet.org (unauthenticated)
+format: bespoke
+description: >-
+  First Street's error surface has two layers and they disagree on purpose. The REST/
+  transport layer uses conventional HTTP status codes with a {"error":{"code","message"}}
+  envelope. The GraphQL layer returns HTTP 200 for every schema-valid request and puts
+  failures in an errors[] array alongside a partially-resolved data object — so an agent
+  that only checks the status code will read a field-level authorization failure as a
+  success.
+
+envelopes:
+  rest:
+    shape: '{"error": {"code": "<http-status-as-string>", "message": "<human message>"}}'
+    observed: '{"error":{"code":"401","message":"Invalid API Key"}}'
+    observed_at: https://api.firststreet.org/v3/graphql
+    observed_on: '2026-09-10'
+  graphql:
+    shape: '{"errors": [ {message, path?, locations?, extensions?} ], "data": {...}|null}'
+    partial_success: true
+    note: >-
+      On a field-level error, data STILL resolves for the fields the caller is entitled to
+      and the failed field is null; errors[] carries the reason and a path[] pointing at
+      the failed selection. data is null only for a malformed query (HTTP 422).
+    request_id: >-
+      Error messages embed a RequestID, e.g. "... RequestID:
+      48c215c0356d24eef17477b88c69a7a3" — quote it when contacting api@firststreet.org.
+
+http_status_codes:
+  - {status: 200, title: Success, meaning: 'Successful API request. Does NOT mean the query succeeded — check errors[].'}
+  - {status: 400, title: Bad Request, meaning: Specific query parameters are missing from the request.}
+  - {status: 401, title: Unauthorized, meaning: API key is unauthorized or the account is not active.}
+  - {status: 403, title: Forbidden, meaning: A request made without a valid API key.}
+  - {status: 404, title: Not Found, meaning: The requested resource does not exist.}
+  - {status: 422, title: Unprocessable Content, meaning: 'The GraphQL query does not conform to the schema. data resolves to null.'}
+  - {status: 429, title: Too Many Requests, meaning: 'Rate limit exceeded — see rate-limits/first-street-rate-limits.yml.'}
+  - {status: 500, title: Internal Server Error, remediation: 'If it persists, email api@firststreet.org.'}
+  - {status: 501, title: Not Implemented, meaning: The requested service has not been implemented. Check the URL.}
+  - {status: 502, title: Bad Gateway, remediation: 'Internal error; if it persists, email api@firststreet.org.'}
+  - {status: 503, title: Service Unavailable, remediation: 'Internal error; if it persists, email api@firststreet.org.'}
+  - {status: 504, title: Gateway Timeout, meaning: 'Internal error from an upstream provider.', remediation: 'If it persists, email api@firststreet.org.'}
+
+graphql_errors:
+  - id: node-access-denied
+    code: 'Error 15'
+    http_status: 200
+    message_template: >-
+      Error 15: Your account has no access to this node. Please contact
+      api@firststreet.org for more information.. RequestID: <id>
+    meaning: >-
+      Entitlement error, not a bug. Access to individual schema NODES (e.g. heat, wind) is
+      granted per contract; requesting a node outside the contract nulls that branch and
+      appends this error.
+    remediation: >-
+      Remove the unentitled selection from the query, or ask api@firststreet.org to enable
+      the field for the account.
+    agent_note: >-
+      This is the failure mode an agent is most likely to hit and least likely to notice —
+      HTTP 200, data present, one branch silently null.
+  - id: graphql-validation-failed
+    extensions_code: GRAPHQL_VALIDATION_FAILED
+    http_status: 422
+    message_example: 'Cannot query field "riskDirection" on type "PropertyHeat".'
+    meaning: The query does not match the schema. data is null; nothing is returned.
+    remediation: >-
+      Validate against the published SDL before sending —
+      graphql/first-street-climate-risk-api.graphql or
+      graphql/first-street-enterprise-api.graphql.
+
+modeling_statuses:
+  note: >-
+    Not errors, but the values an agent must poll on. Every peril exposes
+    status { name } typed as FSModelResponseStatus.
+    Source: https://docs.firststreet.org/api/climate-risk-api/asynchronous-data-retrevial
+  values:
+    - {name: PENDING, meaning: Modeling was submitted for this place and peril.}
+    - {name: RUNNING, meaning: Modeling has started.}
+    - {name: SUCCESS, meaning: 'Peril data is available. Note the peril may still be Excluded.'}
+    - {name: FAILED, meaning: 'Modeling could not finish. First Street is notified automatically.'}
+    - {name: TIMEOUT, meaning: 'Modeling took too long (resource constraint, upstream outage). First Street is notified.'}
+    - {name: ERROR, meaning: 'Modeling was attempted and failed. First Street is notified.'}
+
+support_contact: api@firststreet.org
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

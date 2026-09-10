@@ -1,20 +1,56 @@
-# Negative probe result — recorded deliberately.
+# Probe record for llms.txt across First Street's hosts. Kept because it documents WHERE
+# the file is and is not — the apex 200s with HTML, which is exactly the false positive
+# this artifact class exists to stop.
 #
-# roadmap#27: `llms_txt_published` credited a DECLARED pointer wherever no llms/
-# artifact existed. This file IS that artifact. It makes repo_has?(slug,'llms')
-# true so the unprobed-pointer fallback stops firing, while carrying no .txt so
-# llms_txt_present? stays false. The check therefore returns a TRUE zero, backed
-# by a fetched URL and a status code, instead of a false credit.
-#
-# Same posture as the well-known probe artifacts: a recorded absence is a valid
-# measurement. Do not delete this to 'clean up' — deleting it restores the bug.
+# 2026-09-10: a REAL llms.txt was found on the docs host, at the GitBook SPACE path
+# (/api/llms.txt), not at the docs root. Saved verbatim to llms/first-street-llms.txt.
+# The earlier round probed only https://firststreet.org/llms.txt, got a 200 of HTML, and
+# correctly recorded a soft-404 — but stopped there and missed the published file.
+generated: '2026-09-10'
+method: probed
 llms:
-  probed: '2026-08-17'
-  url: https://firststreet.org/llms.txt
-  verdict: soft-404
-  published: false
-  http_status: 200
-  content_type: text/html
-  bytes: 81392
-  note: >-
-    HTTP 200 serving HTML, not a text llms.txt. A 200 is not evidence.
+  published: true
+  canonical_url: https://docs.firststreet.org/api/llms.txt
+  file: first-street-llms.txt
+  publisher: GitBook
+probes:
+  - url: https://docs.firststreet.org/api/llms.txt
+    http_status: 200
+    content_type: text/markdown; charset=utf-8
+    bytes: 5417
+    verdict: published
+    probed: '2026-09-10'
+    note: 45 documentation links across the three APIs, the MCP server and the Enterprise Suite.
+  - url: https://docs.firststreet.org/api/llms-full.txt
+    http_status: 200
+    content_type: text/markdown; charset=utf-8
+    bytes: 127062
+    verdict: published
+    probed: '2026-09-10'
+    note: >-
+      Full docs corpus. NOT committed — *-llms-full.txt is gitignored network-wide.
+  - url: https://docs.firststreet.org/llms.txt
+    http_status: 200
+    content_type: text/html
+    bytes: 11164
+    verdict: soft-404
+    probed: '2026-09-10'
+    note: >-
+      Docs ROOT is a GitBook loader shell that answers 200 for every path, including a
+      negative control. Only the /api/ space path serves the real file.
+  - url: https://firststreet.org/llms.txt
+    http_status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 81760
+    verdict: soft-404
+    probed: '2026-09-10'
+    note: >-
+      Next.js "Page Not Found" body. A negative-control path on the same host returned
+      the same shape at 81,826 bytes.
+lesson: >-
+  On a GitBook-hosted docs site, probe <docs-host>/<space>/llms.txt as well as the host
+  root. The apex and the docs root can both soft-404 while the file is served one path
+  segment deeper.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

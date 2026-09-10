@@ -1,0 +1,54 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the First Street Climate Risk GraphQL API
+  version: 1.0.0
+extends: openapi/first-street-graphql-api-openapi.yml
+x-generated: '2026-09-10'
+x-method: generated
+x-source: >-
+  Derived from https://docs.firststreet.org/api/ and the first-party SDL at
+  graphql/first-street-climate-risk-api.graphql. Captures what the transport-level OpenAPI
+  cannot say: that this single POST is a door onto an 11-field GraphQL schema whose real
+  contract lives in the SDL, and that responses are asynchronous.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-09-10'
+      x-graphql-sdl: graphql/first-street-climate-risk-api.graphql
+      x-graphql-introspection: gated
+      x-graphql-introspection-note: >-
+        POST {__schema{queryType{name}}} to this endpoint returns HTTP 401 Invalid API Key.
+        The SDL is published instead at github.com/FirstStreet/api.
+      x-mcp-server: https://mcp.firststreet.org/mcp
+      x-agent-skills: skills/_index.yml
+  - target: $.paths['/v3/graphql'].post
+    update:
+      x-response-semantics: >-
+        Returns HTTP 200 for every schema-valid request. Failures appear in errors[] with a
+        partially-resolved data object. HTTP 422 only for a malformed query.
+      x-async: poll-on-status
+      x-async-status-enum: [PENDING, RUNNING, SUCCESS, FAILED, TIMEOUT, ERROR]
+      x-async-note: >-
+        Every peril node carries status { name }. Read status before data; PENDING/RUNNING
+        means the model is still computing for this place.
+      x-entitlement: per-schema-node
+      x-entitlement-error: 'Error 15: Your account has no access to this node.'
+      x-query-complexity-limit: 700
+      x-rate-limit: 150 requests/minute (default, contractual)
+      x-rate-limit-headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
+      x-idempotency: none
+      x-data-vintage-default: latest
+      x-data-vintage-retained: 2
+      x-graphql-query-fields: [locality, localitiesByMacroeconomicConnection, localitiesByInsuranceConnection, place, placeByAddress, placeByCoordinate, assetTypes, metadataLookup, version, geospatial, adaptations]
+      x-graphql-mutation-fields: []
+  - target: $.components.securitySchemes.apiKeyQuery
+    update:
+      description: >-
+        Static API key as the `key` query parameter. Long-lived and unscoped. Query-string
+        keys land in logs and Referer headers — First Street's own docs require proxying
+        browser-facing calls server-side.
+  - target: $.components.securitySchemes.bearerAuth
+    update:
+      description: >-
+        The same static API key sent as `Authorization: Bearer <key>`. The Bearer shape is
+        borrowed; this is not an OAuth 2.0 access token. Preferred over the query parameter.

@@ -1,0 +1,114 @@
+generated: '2026-09-10'
+method: searched
+source: https://github.com/FirstStreet/api/commits
+description: >-
+  First Street publishes no changelog page and no release-notes feed on its docs site. It
+  does, however, version its GraphQL schemas in a public GitHub repository, and those
+  commits are a real, dated, first-party record of what changed in the contract. That
+  repository is the changelog First Street actually has.
+finding: >-
+  There is no documented deprecation notice period and no changelog on docs.firststreet.org
+  — an integrator learns that a peril was added or a field deprecated by diffing
+  schema.graphql. A dated changelog page is the single cheapest operational-transparency
+  fix available to this provider.
+
+scheme:
+  api: uri-path (v3 / enterprise / v2 tiles)
+  data: vintage
+  current_version: Vintage 4
+  current_since: '2026-07-01'
+  tags_published: [v3.0, v2024.38]
+  tag_note: 'Only two tags exist on the schema repo; the branch names (v2026.19, v2025.06) carry more of the versioning signal than the tags do.'
+
+sources:
+  - {kind: schema-repository, url: 'https://github.com/FirstStreet/api', note: 'Three SDLs — climate-risk-api, enterprise-api, us-domestic-api'}
+  - {kind: status-incidents, url: 'https://status.firststreet.org/feed.rss', note: 'Incident and maintenance history, not feature changes'}
+  - {kind: docs-page, url: 'https://docs.firststreet.org/api/climate-risk-api/data-vintage', note: 'Explains the vintage model; does not list vintage release dates'}
+
+entries:
+  - date: '2026-07-17'
+    title: Update climate risk to v4
+    ref: PR #13 (dan/vintage4)
+    kind: additions
+    breaking: false
+    note: Aligns the published Climate Risk SDL with Vintage 4, the default since 2026-07-01.
+  - date: '2026-05-12'
+    title: Schema update
+    ref: PR #12 (v2026.19)
+    kind: additions
+    breaking: false
+  - date: '2026-05-06'
+    title: Staging new enterprise API
+    ref: commit
+    kind: additions
+    breaking: false
+    note: The current Enterprise schema (25 queries / 42 mutations) lands.
+  - date: '2026-02-05'
+    title: Expand schema with adaptation, asset valuation, and locality types
+    ref: PR #11 (v2025.06)
+    kind: additions
+    breaking: false
+    note: Adaptations and locality macroeconomics — the surface the MCP get_adaptations and search_localities tools sit on.
+  - date: '2025-08-27'
+    title: Refine API descriptions and fix spelling errors
+    ref: commit
+    kind: documentation
+    breaking: false
+  - date: '2025-08-13'
+    title: Update to reflect global offerings
+    ref: PR #10 (dan/global)
+    kind: additions
+    breaking: false
+    note: The pivot from the US-domestic API to worldwide coverage.
+  - date: '2025-01-15'
+    title: Add hail/drought
+    ref: PR #9 (dan/haildrought)
+    kind: additions
+    breaking: false
+  - date: '2024-12-12'
+    title: Add new perils
+    ref: PR #8 (dan/hd)
+    kind: additions
+    breaking: false
+  - date: '2024-09-05'
+    title: Adding insurance impacts
+    ref: PR #7 (dan/fs-crm)
+    kind: additions
+    breaking: false
+  - date: '2024-07-18'
+    title: Updates for v4
+    ref: PR #6 (dan/v4)
+    kind: additions
+    breaking: false
+  - date: '2024-01-17'
+    title: Add Air Quality updates
+    ref: PR #5 (dan/2024)
+    kind: additions
+    breaking: false
+  - date: '2023-07-27'
+    title: Add updated schema
+    ref: PR #4 (v3)
+    kind: additions
+    breaking: false
+  - date: '2023-03-01'
+    title: Add wind
+    ref: PR #3 (wind)
+    kind: additions
+    breaking: false
+  - date: '2022-10-24'
+    title: Update to v3
+    ref: PR #2 (pro)
+    kind: breaking
+    breaking: true
+    note: The v2 US-domestic API moved to maintenance-only around this line.
+
+corporate:
+  - date: '2026-08-03'
+    title: MSCI completes acquisition of First Street
+    kind: ownership
+    source: https://www.msci.com/discover-msci/media-room/msci-completes-acquisition-of-first-street
+    surface_impact: MSCI terms/privacy interstitial on firststreet.org; MSCI branding in app.firststreet.org. API surface unchanged.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

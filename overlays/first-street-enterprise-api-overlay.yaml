@@ -1,0 +1,60 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the First Street Enterprise GraphQL API
+  version: 1.0.0
+extends: openapi/first-street-enterprise-api-openapi.yml
+x-generated: '2026-09-10'
+x-method: generated
+x-source: >-
+  Derived from https://docs.firststreet.org/api/enterprise-api/, the first-party SDL at
+  graphql/first-street-enterprise-api.graphql, and a live anonymous introspection of the
+  endpoint on 2026-09-10.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-09-10'
+      x-graphql-sdl: graphql/first-street-enterprise-api.graphql
+      x-graphql-introspection: open
+      x-graphql-introspection-note: >-
+        A full introspection query answered anonymously with HTTP 200 and 350 types on
+        2026-09-10 — saved to graphql/first-street-enterprise-introspection.json. Data
+        queries still require a key.
+      x-mcp-server: null
+      x-mcp-note: >-
+        The Enterprise API has NO MCP surface. First Street's MCP server covers the Climate
+        Risk API only; the docs state Enterprise expansion is planned.
+      x-agent-skills: skills/first-street-portfolio-project.md
+  - target: $.paths['/enterprise/graphql'].post
+    update:
+      x-response-semantics: >-
+        HTTP 200 for every schema-valid request; failures in errors[] alongside data.
+      x-async: job-and-poll
+      x-async-note: >-
+        Uploads, imports, exports, module refreshes and async deletes all return a
+        ProjectJob whose status must be polled. No webhooks, no subscriptions.
+      x-write-surface: true
+      x-mutation-count: 42
+      x-query-count: 25
+      x-idempotency: none
+      x-idempotency-note: >-
+        No Idempotency-Key header, no request key, no documented replay window. A retried
+        mutation is a second mutation.
+      x-dry-run: false
+      x-dry-run-note: >-
+        The staged-assets step of the upload workflow is the only rehearsal available, and
+        it covers one flow.
+      x-reversibility: documented
+      x-irreversible-operations: [deleteProjectAsync, deleteProject, deleteUserData]
+      x-reversal-operations:
+        - cancelProjectExport
+        - setProjectStatus(ACTIVE)
+        - deleteProjectAssetByPlaceID
+      x-deprecated-schema-members: 42
+      x-query-complexity-limit: 700
+      x-rate-limit: 150 requests/minute (default, contractual)
+  - target: $.components.securitySchemes.apiKeyQuery
+    update:
+      description: Static API key as the `key` query parameter. Long-lived and unscoped.
+  - target: $.components.securitySchemes.bearerAuth
+    update:
+      description: 'The same static API key sent as `Authorization: Bearer <key>`. Not an OAuth token.'

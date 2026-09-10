@@ -1,0 +1,148 @@
+generated: '2026-09-10'
+method: searched
+status: published
+source: https://docs.firststreet.org/api/mcp/getting-started
+description: >-
+  First Street publishes a hosted, remote MCP server that exposes the Climate Risk API
+  (property-level physical climate risk: flood, wildfire, wind, heat, cold, drought) to
+  agents over Streamable HTTP. The docs page names the endpoint and the tool set; the
+  live server answered an anonymous tools/list with the real inputSchema for every tool.
+
+deployment:
+  mode: remote
+  endpoint: https://mcp.firststreet.org/mcp
+  install: null
+  package: null
+  auth: api-key
+  verified: probed
+
+server:
+  name: firststreet
+  transport: http
+  transport_note: >-
+    Docs say "Streamable HTTP transports"; the endpoint answered a JSON-RPC POST with
+    Accept: application/json, text/event-stream and replied as text/event-stream.
+  url: https://mcp.firststreet.org/mcp
+  auth:
+    scheme: bearer
+    header: Authorization
+    value: Bearer <your-api-key>
+    note: >-
+      Same API key as the REST/GraphQL surface. Access is gated by the same contractual
+      entitlement as the Climate Risk API — "All API users with access to the Climate Risk
+      API is able utilize First Street's MCP Service."
+  client_config: |
+    {
+      "mcpServers": {
+        "firststreet": {
+          "transport": "http",
+          "url": "https://mcp.firststreet.org/mcp",
+          "headers": { "Authorization": "Bearer <your-token>" }
+        }
+      }
+    }
+
+x-evidence:
+  fetched: '2026-09-10'
+  tools_list:
+    url: https://mcp.firststreet.org/mcp
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 200
+    content_type: text/event-stream
+    authenticated: false
+    note: >-
+      tools/list is ANONYMOUS on this server — no API key was sent and the full tool
+      manifest with inputSchema came back. Tool INVOCATION still requires the key.
+    file: first-street-mcp-tools.json
+  docs:
+    url: https://docs.firststreet.org/api/mcp/getting-started
+    http_status: 200
+  status_page_component: >-
+    "MCP Server" is a first-class monitored component on https://status.firststreet.org/
+
+coverage:
+  apis_exposed:
+    - First Street Climate Risk API (v3 GraphQL)
+  apis_not_exposed:
+    - First Street Enterprise API — docs state expansion is planned, "in the near future"
+    - First Street Raster Map API — no tile tool is exposed
+  tool_count: 10
+
+tools:
+  - name: get_place_by_address
+    description: >-
+      Look up a property by street address. Returns climate risk data including flood,
+      wildfire, wind, heat, cold, and drought factors.
+    required: [address]
+    parameters: [address, lat, lng, building]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.placeByAddress
+  - name: get_place_by_coordinate
+    description: Look up a property by latitude/longitude. Returns the same climate risk data as address lookup.
+    required: [lat, lng]
+    parameters: [lat, lng, building]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.placeByCoordinate
+  - name: get_place_by_id
+    description: >-
+      Look up a property by its First Street Place ID. Returns climate risk data plus
+      building details, location geometry, and adaptations.
+    required: [placeId]
+    parameters: [placeId, building]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.place
+  - name: find_buildings
+    description: >-
+      Find buildings within a geographic area defined by a GeoJSON polygon. Returns
+      building locations, asset types, and Place IDs. Area must not exceed 9 km2.
+    required: [area]
+    parameters: [area]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.geospatial
+  - name: get_adaptations
+    description: >-
+      Get climate adaptation recommendations and cost-benefit analysis for a property —
+      flood barriers, fire-proofing, defensible space, roof upgrades, wind design
+      improvements, with payback periods.
+    required: [placeId, holdPeriod, ssp]
+    parameters: [placeId, holdPeriod, ssp]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.adaptations
+  - name: search_localities
+    description: >-
+      Search and paginate localities with macroeconomic data. Filter by administrative
+      level and sort by GDP, population, property price indices.
+    required: [adminLevel]
+    parameters: [adminLevel, search, ssp, first, after]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.localitiesByMacroeconomicConnection
+  - name: get_locality
+    description: Look up a specific locality by ID. Returns macroeconomic indicators and bounding box.
+    required: [localityId]
+    parameters: [localityId]
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.locality
+  - name: get_asset_types
+    description: List all supported asset type IDs with human-readable descriptions.
+    required: []
+    parameters: []
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.assetTypes
+  - name: get_metadata
+    description: >-
+      Get API metadata including available data vintages, industry classifications, and
+      sector classifications.
+    required: []
+    parameters: []
+    source_operation: graphql/first-street-climate-risk-api.graphql#Query.metadataLookup
+  - name: execute_graphql
+    description: >-
+      Execute an arbitrary GraphQL query against the First Street v3 API. Escape hatch for
+      complex or custom queries not covered by the other tools.
+    required: [query]
+    parameters: [query, variables]
+    source_operation: openapi/first-street-graphql-api-openapi.yml#climateRiskGraphql
+
+enums:
+  ssp:
+    - {value: SSP_1_26, label: Optimistic, description: Low emissions, sustainable development}
+    - {value: SSP_2_45, label: Moderate, description: Middle-of-the-road scenario}
+    - {value: SSP_5_85, label: Pessimistic, description: High emissions, fossil-fuel driven}
+  adminLevel: [ADMIN_0, ADMIN_1, ADMIN_2, METRO]
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

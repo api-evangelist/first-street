@@ -13,6 +13,11 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "first-street-enterprise-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "first-street-graphql-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "first-street-maps-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

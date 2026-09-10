@@ -1,0 +1,91 @@
+generated: '2026-09-10'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, proxy.golang.org, and the FirstStreet GitHub organization
+description: >-
+  First Street has published three first-party client libraries — JavaScript, Python and
+  Go. All three are ARCHIVED on GitHub and all three target the retired v2 US-domestic
+  "First Street Foundation API". The newest release across the whole set is 2021-06-17;
+  the current product is the v3/v4 global GraphQL Climate Risk API and the Enterprise API,
+  neither of which has a maintained SDK. A consumer integrating today writes their own
+  GraphQL client, or uses the MCP server.
+finding: >-
+  Every published First Street SDK predates the API it would have to call by roughly five
+  years. This is the strongest decay signal in the record and it is provider-published and
+  reliably dated.
+official_package_count: 3
+maintained_package_count: 0
+
+packages:
+  - language: javascript
+    registry: npm
+    name: firststreet-js
+    url: https://www.npmjs.com/package/firststreet-js
+    install: npm install firststreet-js
+    official: true
+    version: 1.0.0
+    published: '2021-05-17'
+    release_count: 7
+    first_published: '2019-11-18'
+    repository: https://github.com/FirstStreet/firststreet-js-deprecated
+    status: deprecated
+    note: >-
+      Registry description: "A Javascript API Client for the First Street Foundation API".
+      The backing GitHub repo has been renamed firststreet-js-deprecated and archived
+      (last push 2022-07-20). Targets the v2 US-domestic REST API.
+    targets_api: v2 US Domestic API (retired to maintenance-only)
+
+  - language: python
+    registry: pypi
+    name: fsf-api-access-python
+    url: https://pypi.org/project/fsf-api-access-python/
+    install: pip install fsf-api-access-python
+    official: true
+    version: 2.3.6
+    published: '2021-06-17'
+    repository: https://github.com/FirstStreet/fsf_api_access_python
+    status: archived
+    note: >-
+      "A Python API Access Client for the First Street Foundation API". GitHub repo
+      archived, last push 2021-11-23. Targets the v2 US-domestic REST API.
+    targets_api: v2 US Domestic API (retired to maintenance-only)
+
+  - language: go
+    registry: go-modules
+    name: github.com/firststreet/firststreet-go
+    url: https://pkg.go.dev/github.com/firststreet/firststreet-go
+    install: go get github.com/firststreet/firststreet-go
+    official: true
+    version: v0.3.0
+    published: '2020-02-06'
+    repository: https://github.com/FirstStreet/firststreet-go-old
+    status: archived
+    note: >-
+      proxy.golang.org lists v0.1.0, v0.2.0, v0.3.0; v0.3.0 timestamped
+      2020-02-06T01:12:31Z. The GitHub repo is now named firststreet-go-old and archived.
+    targets_api: v2 US Domestic API (retired to maintenance-only)
+
+not_published:
+  - language: javascript
+    for: Climate Risk API (v3/v4 GraphQL)
+    note: No maintained client. Docs show raw fetch/curl and a Node proxy example for tiles.
+  - language: python
+    for: Climate Risk API (v3/v4 GraphQL)
+    note: Docs show a raw `requests` polling example rather than an SDK.
+  - language: any
+    for: Enterprise API
+    note: Docs show raw GraphQL mutations and a bash/curl upload flow.
+
+registries_checked:
+  - {registry: npm, query: firststreet, result: only firststreet-js (official) and @firststreet/tile-server 0.0.1 from 2018 (an internal tile server, not a client)}
+  - {registry: pypi, query: 'firststreet, fsf-api-access', result: fsf-api-access-python only}
+  - {registry: go-modules, query: github.com/firststreet/*, result: firststreet-go v0.3.0}
+  - {registry: rubygems, query: firststreet, result: none}
+  - {registry: packagist, query: firststreet, result: none}
+  - {registry: crates.io, query: firststreet, result: none}
+  - {registry: nuget, query: firststreet, result: none}
+  - {registry: maven-central, query: firststreet, result: none}
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
