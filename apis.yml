@@ -151,22 +151,6 @@ apis:
     url: overlays/first-street-enterprise-api-overlay.yaml
   - type: GraphQL
     url: graphql/first-street-enterprise-api.graphql
-- aid: first-street:first-street-graphql-api
-  name: First Street Graphql API
-  description: The Graphql API from First Street — 1 operation(s) for graphql.
-  humanURL: https://docs.firststreet.org/api
-  tags:
-  - GraphQL
-  tags_raw:
-  - Graphql
-  baseURL: https://api.firststreet.org
-  properties:
-  - type: OpenAPI
-    url: openapi/first-street-graphql-api-openapi.yml
-  - type: Overlay
-    url: overlays/first-street-graphql-api-overlay.yaml
-  - type: GraphQL
-    url: graphql/first-street-climate-risk-api.graphql
 - aid: first-street:first-street-maps-api
   name: First Street Maps API
   description: The Maps API from First Street — 1 operation(s) for maps.
@@ -182,12 +166,11 @@ apis:
 - aid: first-street:mcp
   name: First Street MCP Server
   description: >-
-    Hosted, remote Model Context Protocol server exposing the Climate Risk API to agents
-    over Streamable HTTP. Ten tools with real JSON Schema inputs — property lookup by
-    address, coordinate or Place ID, building discovery inside a polygon, adaptation
-    cost-benefit, locality macroeconomics, metadata, and an arbitrary GraphQL escape
-    hatch. Authenticated with the same API key as the rest of the surface; tools/list is
-    answerable anonymously.
+    Hosted, remote Model Context Protocol server exposing the Climate Risk API to agents over Streamable
+    HTTP. Ten tools with real JSON Schema inputs — property lookup by address, coordinate or Place ID,
+    building discovery inside a polygon, adaptation cost-benefit, locality macroeconomics, metadata, and
+    an arbitrary GraphQL escape hatch. Authenticated with the same API key as the rest of the surface;
+    tools/list is answerable anonymously.
   humanURL: https://docs.firststreet.org/api/mcp/getting-started
   baseURL: https://mcp.firststreet.org/mcp
   tags:
@@ -202,8 +185,21 @@ apis:
     url: mcp/first-street-tool-crosswalk.yml
   - type: Documentation
     url: https://docs.firststreet.org/api/mcp/getting-started
-
+- aid: first-street:first-street-graph-ql-api
+  name: First Street Graph QL API
+  description: The Graph QL API from First Street — 1 operation(s) for graph ql.
+  humanURL: https://docs.firststreet.org/api/climate-risk-api/getting-started
+  baseURL: https://api.firststreet.org
+  tags:
+  - Graph QL
+  properties:
+  - type: OpenAPI
+    url: openapi/first-street-graph-ql-api-openapi.yml
+  - type: GraphQL
+    url: graphql/first-street-climate-risk-api.graphql
 common:
+  - type: Overlay
+    url: overlays/first-street-graphql-api-overlay.yaml
   - type: AgenticAccess
     url: agentic-access/first-street-agentic-access.yml
   - type: TrustCenter
