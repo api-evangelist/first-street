@@ -191,6 +191,8 @@ apis:
   humanURL: https://docs.firststreet.org/api/climate-risk-api/getting-started
   baseURL: https://api.firststreet.org
   tags:
+  - GraphQL
+  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
