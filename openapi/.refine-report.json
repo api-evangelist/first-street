@@ -1,23 +1,33 @@
 {
   "provider": "first-street",
   "sources": [
-    "first-street-enterprise-api-openapi.yml",
-    "first-street-graphql-api-openapi.yml",
-    "first-street-maps-api-openapi.yml"
+    "_original/first-street-openapi.yml"
   ],
   "outputs": [
     "first-street-enterprise-api-openapi.yml",
     "first-street-graphql-api-openapi.yml",
     "first-street-maps-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
-    "first-street-enterprise-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "first-street-graphql-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "first-street-maps-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "first-street-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "first-street-openapi.yml: tagged paths POST /v3/graphql -> Graphql",
+    "first-street-openapi.yml: tagged paths POST /enterprise/graphql -> Enterprise",
+    "first-street-openapi.yml: tagged paths GET /v2/maps/tile/{peril}/{product}/{z}/{x}/{y}.png -> Maps",
+    "first-street-openapi.yml: declared missing tag: Enterprise",
+    "first-street-openapi.yml: declared missing tag: Graphql",
+    "first-street-openapi.yml: declared missing tag: Maps",
+    "superseded outputs removed: first-street-graph-ql-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 7 total)"
   ],
-  "skipped": []
+  "skipped": [
+    "first-street-enterprise-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "first-street-graph-ql-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "first-street-maps-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
