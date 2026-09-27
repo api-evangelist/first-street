@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: First Street Graphql API
+  title: First Street GraphQL API
   description: 'First Street provides property-level physical climate risk data via several APIs: a GraphQL Climate Risk API, a GraphQL Enterprise API, and a tile-based Raster Map API. Authentication is by API key, either as the `key` query parameter or an `Authorization: Bearer ` header.'
   version: '3.0'
   contact:

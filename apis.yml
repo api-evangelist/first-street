@@ -51,12 +51,12 @@ modified: '2026-09-10'
 position: Consuming
 tags:
   - Climate
-  - Risk
+  - Risk Management
   - Environment
   - Modeling
   - Geospatial
   - Insurance
-  - Real-Estate
+  - Real Estate
   - Data
   - GraphQL
   - Mapping
@@ -71,6 +71,7 @@ tags_raw:
   - Data
   - GraphQL
   - Mapping
+  - Real-Estate
 url: >-
   https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml
 specificationVersion: '0.23'
@@ -78,6 +79,12 @@ apis:
 - aid: first-street:climate-risk
   name: First Street Climate Risk API
   tags:
+  - Environment
+  - Modeling
+  - Risk Management
+  - Climate
+  - GraphQL
+  tags_raw:
   - Environment
   - Modeling
   - Risk
@@ -103,6 +110,12 @@ apis:
   tags:
   - Environment
   - Modeling
+  - Risk Management
+  - Climate
+  - GraphQL
+  tags_raw:
+  - Environment
+  - Modeling
   - Risk
   - Climate
   - GraphQL
@@ -122,6 +135,12 @@ apis:
 - aid: first-street:raster-map
   name: First Street Raster Map API
   tags:
+  - Environment
+  - Modeling
+  - Risk Management
+  - Climate
+  - Mapping
+  tags_raw:
   - Environment
   - Modeling
   - Risk
@@ -177,6 +196,11 @@ apis:
   - MCP
   - Agents
   - Climate
+  - Risk Management
+  tags_raw:
+  - MCP
+  - Agents
+  - Climate
   - Risk
   properties:
   - type: MCPServer
@@ -191,8 +215,6 @@ apis:
   humanURL: https://docs.firststreet.org/api/climate-risk-api/getting-started
   baseURL: https://api.firststreet.org
   tags:
-  - GraphQL
-  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
