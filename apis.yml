@@ -49,6 +49,9 @@ access: 3rd-Party
 created: '2025-03-01'
 modified: '2026-09-10'
 position: Consuming
+x-docs-platform: gitbook
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-10-03
 tags:
   - Climate
   - Risk Management
@@ -215,6 +218,8 @@ apis:
   humanURL: https://docs.firststreet.org/api/climate-risk-api/getting-started
   baseURL: https://api.firststreet.org
   tags:
+  - GraphQL
+  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
