@@ -1,0 +1,14 @@
+{
+  "repo": "first-street",
+  "feeds": [
+    {
+      "source": "https://firststreet.org/insights",
+      "feed_url": "https://firststreet.org/insights",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-10-10T13:15:00Z"
+}
