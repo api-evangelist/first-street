@@ -1,4 +1,4 @@
-# First Street (first-street)
+# First Street
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,100 +64,152 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-First Street models use validated and proven methodologies to ensure model accuracy. We measure and predict the impact of a peril based on the underlying physics of how an actual event would transpire. First Street exposes Climate Risk, Enterprise, and Raster Map APIs for property-level climate risk data.
+First Street is the physical climate risk data and analytics company behind the Risk Factor property reports, acquired by MSCI on 2026-08-03. It models flood, wildfire, wind, heat, cold, drought and air quality at property level anywhere on Earth using peer-reviewed, physics-based methods rather than historical claims data, and exposes that model through three APIs: a global Climate Risk GraphQL API, an Enterprise GraphQL API for portfolio-level exposure, scenario analysis and adaptation cost-benefit, and a Raster Map tile API for visualising perils on a map. It also runs a hosted MCP server so agents can query property climate risk directly. Access to every surface, and to individual fields within the GraphQL schemas, is granted by contract.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/first-street/refs/heads/main/apis.yml)
+**Areas:** Climate · Risk Management · Environment · Modeling · Geospatial · Insurance · Real Estate · Data · GraphQL · Mapping
 
-## Scope
+## First Street on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for First Street is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/first-street/](https://apis.io/providers/first-street/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (7)
 
-- Environment
-- Modeling
-- Risk
-- Climate
+- [First Street Climate Risk API](https://apis.io/apis/first-street/climate-risk/) — The Climate Risk API provides physical climate risk data globally, delivering property-level insights into hazards including flood, wildfire, heat, wind,…
+- [First Street Enterprise API](https://apis.io/apis/first-street/enterprise/) — The Enterprise API offers aggregated climate risk views for portfolios, enabling enterprise users to assess risk across multiple properties and geographic…
+- [First Street Raster Map API](https://apis.io/apis/first-street/raster-map/) — The Raster Map API delivers visual raster layers of climate perils for mapping and visualization use cases.
+- [First Street Enterprise API](https://apis.io/apis/first-street/first-street-enterprise-api/) — The Enterprise API from First Street — 1 operation(s) for enterprise.
+- [First Street Maps API](https://apis.io/apis/first-street/first-street-maps-api/) — The Maps API from First Street — 1 operation(s) for maps.
+- [First Street MCP Server](https://apis.io/apis/first-street/mcp/) — Hosted, remote Model Context Protocol server exposing the Climate Risk API to agents over Streamable HTTP. Ten tools with real JSON Schema inputs — property…
+- [First Street Graph QL API](https://apis.io/apis/first-street/first-street-graph-ql-api/) — The Graph QL API from First Street — 1 operation(s) for graph ql.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-03-01
-- **Modified:** 2026-04-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### MCP servers (1)
 
-### First Street Climate Risk API
+Model Context Protocol servers that expose the API to agents.
 
-The Climate Risk API provides physical climate risk data globally, delivering property-level insights into hazards including flood, wildfire, heat, wind, and air quality.
+- [firststreet](https://apis.io/servers/first-street/firststreet/)
 
-- **Human URL:** [https://docs.firststreet.org/api](https://docs.firststreet.org/api)
+#### Agentic access (1)
 
-#### Tags
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- Environment
-- Modeling
-- Risk
-- Climate
+- [First Street Agentic Access](https://apis.io/agentic-access/first-street/first-street-agentic-access/)
 
-#### Properties
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [First Street API](https://apis.io/collections/first-street/open-first-street/)
+- [First Street Enterprise API](https://apis.io/collections/first-street/open-first-street-enterprise-api/)
+- [First Street Enterprise Graphql API](https://apis.io/collections/first-street/open-first-street-graphql-api/)
+- [First Street Enterprise Maps API](https://apis.io/collections/first-street/open-first-street-maps-api/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [First Street Enterprise Api Overlay](https://apis.io/overlays/first-street/first-street-enterprise-api-overlay/)
+- [First Street Graphql Api Overlay](https://apis.io/overlays/first-street/first-street-graphql-api-overlay/)
+- [First Street Maps Api Overlay](https://apis.io/overlays/first-street/first-street-maps-api-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [First Street Authentication](https://apis.io/security/first-street/first-street-authentication/)
+- [First Street Domain Security](https://apis.io/security/first-street/first-street-domain-security/)
+- [First Street Trust Center](https://apis.io/security/first-street/first-street-trust-center/)
+- [First Street Vulnerability Disclosure](https://apis.io/security/first-street/first-street-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [First Street Plans Pricing](https://apis.io/plans/first-street/first-street-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [First Street Rate Limits](https://apis.io/rate-limits/first-street/first-street-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [First Street Finops](https://apis.io/finops/first-street/first-street-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://firststreet.org/)
 - [Documentation](https://docs.firststreet.org/api)
-- [Postman Collection](collections/first-street.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/first-street.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Getting started](https://docs.firststreet.org/api/climate-risk-api/getting-started)
+- [API reference](https://docs.firststreet.org/api/available-api/graphql-apis)
+- [Pricing](https://firststreet.org/pricing)
+- [Blog](https://firststreet.org/insights)
+- [Security](https://docs.firststreet.org/api/security)
+- [Compliance](https://security.firststreet.org/)
+- [Terms of service](https://www.msci.com/legal/terms-of-use)
+- [Privacy policy](https://firststreet.org/privacy-policy)
+- [GitHub](https://github.com/FirstStreet)
+- [Status](https://status.firststreet.org/)
 
-### First Street Enterprise API
+## API Evangelist rating
 
-The Enterprise API offers aggregated climate risk views for portfolios, enabling enterprise users to assess risk across multiple properties and geographic regions.
+**Kin Score 55.0** — strong · rubric 0.25.0 · scored 2026-10-23
 
-- **Human URL:** [https://docs.firststreet.org/api](https://docs.firststreet.org/api)
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 52.1 |
+| Contract governance | 18.2 |
+| Operational transparency | 57.9 |
+| Developer ergonomics | 73.2 |
+| Access clarity | 46.1 |
 
-#### Tags
+**Agent readiness 35.1** — agent-ready
 
-- Environment
-- Modeling
-- Risk
-- Climate
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
 
-#### Properties
+**Regulatory alignment 27.2** — Insurance
 
-- [Website](https://firststreet.org/)
-- [Documentation](https://docs.firststreet.org/api)
-- [Postman Collection](collections/first-street.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/first-street.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/first-street/](https://apis.io/providers/first-street/).
 
-### First Street Raster Map API
+## How this profile is made
 
-The Raster Map API delivers visual raster layers of climate perils for mapping and visualization use cases.
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-- **Human URL:** [https://docs.firststreet.org/api](https://docs.firststreet.org/api)
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for First Street: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
-#### Tags
+## Open an issue
 
-- Environment
-- Modeling
-- Risk
-- Climate
-- Mapping
-
-#### Properties
-
-- [Website](https://firststreet.org/)
-- [Documentation](https://docs.firststreet.org/api)
-- [Postman Collection](collections/first-street.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/first-street.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/FirstStreet)
-- [LinkedIn](https://www.linkedin.com/company/first-street-foundation)
-- [Website](https://firststreet.org/)
-- [Documentation](https://docs.firststreet.org/api)
-- [L L Ms Txt](https://firststreet.org/llms.txt)
-
-## Maintainers
-
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/first-street/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
